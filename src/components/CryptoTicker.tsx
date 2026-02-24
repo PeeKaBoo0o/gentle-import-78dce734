@@ -1,5 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { z } from 'zod';
+
+const coinPriceSchema = z.object({
+  id: z.string(),
+  symbol: z.string(),
+  image: z.string().url(),
+  current_price: z.number(),
+  price_change_percentage_24h: z.number().nullable().default(0),
+});
+
+const coinArraySchema = z.array(coinPriceSchema);
 
 interface CoinPrice {
   id: string;
@@ -32,11 +43,15 @@ const CryptoTicker = () => {
   useEffect(() => {
     const fetchPrices = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('crypto-prices');
-        if (!error && Array.isArray(data)) {
-          setCoins(data);
-          cacheRef.current = data;
-          return;
+        const { data: edgeData, error } = await supabase.functions.invoke('crypto-prices');
+        if (!error && Array.isArray(edgeData)) {
+          const parsed = coinArraySchema.safeParse(edgeData);
+          if (parsed.success) {
+            const validated: CoinPrice[] = parsed.data.map(c => ({ id: c.id, symbol: c.symbol, image: c.image, current_price: c.current_price, price_change_percentage_24h: c.price_change_percentage_24h ?? 0 }));
+            setCoins(validated);
+            cacheRef.current = validated;
+            return;
+          }
         }
       } catch {}
 
@@ -45,10 +60,14 @@ const CryptoTicker = () => {
           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${COINS.join(',')}&order=market_cap_desc&sparkline=false`
         );
         if (res.ok) {
-          const data = await res.json();
-          setCoins(data);
-          cacheRef.current = data;
-          return;
+          const raw = await res.json();
+          const parsed = coinArraySchema.safeParse(raw);
+          if (parsed.success) {
+            const validated: CoinPrice[] = parsed.data.map(c => ({ id: c.id, symbol: c.symbol, image: c.image, current_price: c.current_price, price_change_percentage_24h: c.price_change_percentage_24h ?? 0 }));
+            setCoins(validated);
+            cacheRef.current = validated;
+            return;
+          }
         }
       } catch {}
 

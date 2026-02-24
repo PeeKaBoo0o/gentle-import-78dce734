@@ -67,8 +67,8 @@ const News = () => {
           setLastUpdated(new Date());
         }
       }
-    } catch (e) {
-      console.error('Failed to fetch crypto news', e);
+    } catch {
+      // silently handle fetch errors
     } finally {
       setLoading(false);
     }

@@ -143,7 +143,7 @@ const ScenarioSection = () => {
         const d = await goldRes.json();
         setGoldChart((d.Data?.Data || []).map((p: any) => ({ time: new Date(p.time * 1000).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }), price: p.close })));
       }
-    } catch (e) { console.error('Chart fetch error:', e); }
+    } catch { /* silently handle */ }
   }, []);
 
   const fetchScenarios = useCallback(async () => {
@@ -156,7 +156,6 @@ const ScenarioSection = () => {
       setBtcData(data.btc || null);
       setGoldData(data.gold || null);
     } catch (e: any) {
-      console.error('Scenarios error:', e);
       setError(e.message || 'Không thể tạo kịch bản');
     } finally {
       setLoading(false);
