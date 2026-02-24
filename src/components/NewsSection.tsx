@@ -44,8 +44,8 @@ const NewsSection = () => {
             setNews(data.Data.slice(0, 6));
           }
         }
-      } catch (e) {
-        console.error('Failed to fetch crypto news', e);
+      } catch {
+        // silently handle fetch errors
       } finally {
         setLoading(false);
       }

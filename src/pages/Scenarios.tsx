@@ -188,8 +188,8 @@ const Scenarios = () => {
         }));
         setGoldChart(goldPoints);
       }
-    } catch (e) {
-      console.error('Chart data fetch error:', e);
+    } catch {
+      // silently handle chart fetch errors
     }
   }, []);
 
@@ -205,7 +205,6 @@ const Scenarios = () => {
       setGoldData(data.gold || null);
       setGeneratedAt(data.generatedAt);
     } catch (e: any) {
-      console.error('Fetch scenarios error:', e);
       setError(e.message || 'Không thể tạo kịch bản. Vui lòng thử lại.');
     } finally {
       setLoading(false);

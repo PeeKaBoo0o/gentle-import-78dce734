@@ -42,8 +42,8 @@ const CalendarSection = () => {
         if (!error && data && Array.isArray(data)) {
           setEvents(data as CalendarEvent[]);
         }
-      } catch (e) {
-        console.error('Calendar fetch error:', e);
+      } catch {
+        // silently handle fetch errors
       }
       setLoading(false);
     };
