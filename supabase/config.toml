@@ -1,1 +1,4 @@
 project_id = "iqhoygutbqzbiwkcvegl"
+
+[functions.fetch-economic-calendar]
+verify_jwt = false
