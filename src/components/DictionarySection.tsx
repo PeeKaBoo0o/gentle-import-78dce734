@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const DictionarySection = () => {
   return (
-    <section id="dictionary" className="section-padding" style={{ backgroundColor: 'hsl(15, 25%, 5%)' }}>
+    <section id="dictionary" className="section-padding" style={{ backgroundColor: 'hsl(0, 0%, 3%)' }}>
       <div className="max-w-2xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
