@@ -22,7 +22,7 @@ const principles = [
 
 const AnalysisSection = () => {
   return (
-    <section id="analysis" className="section-padding" style={{ backgroundColor: 'hsl(15, 25%, 5%)' }}>
+    <section id="analysis" className="section-padding" style={{ backgroundColor: 'hsl(210, 80%, 6%)' }}>
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

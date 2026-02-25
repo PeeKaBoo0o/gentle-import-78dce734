@@ -46,7 +46,7 @@ const IndicatorsSection = () => {
   const backgroundColor = useTransform(
     scrollYProgress,
     [0, 0.35, 0.5, 0.58, 0.62, 1],
-    ['hsl(0, 0%, 3%)', 'hsl(0, 0%, 3%)', 'hsl(0, 0%, 30%)', 'hsl(0, 0%, 70%)', TARGET_BG, TARGET_BG]
+    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 50%, 25%)', 'hsl(210, 30%, 60%)', TARGET_BG, TARGET_BG]
   );
 
   return (
@@ -57,10 +57,7 @@ const IndicatorsSection = () => {
       style={{ backgroundColor }}
     >
       <div className="max-w-5xl mx-auto">
-        <div
-          className="relative"
-          style={{ height: '220vh' }}
-        >
+        <div className="relative" style={{ height: '220vh' }}>
           {projects.map((project, i) => (
             <div
               key={i}
@@ -75,34 +72,34 @@ const IndicatorsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="rounded-2xl overflow-hidden shadow-lg border border-[hsl(0,0%,80%)]/40"
+                className="rounded-2xl overflow-hidden shadow-lg border border-[hsl(210,20%,85%)]/40"
                 style={{
                   transform: `scale(${1 - i * 0.02})`,
                   transformOrigin: 'top center',
-                  backgroundColor: 'hsl(0, 0%, 97%)',
+                  backgroundColor: 'hsl(0, 0%, 98%)',
                 }}
               >
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="p-8 flex flex-col justify-center">
                     <span className="inline-flex items-center gap-2 text-[11px] tracking-wider uppercase px-3 py-1 rounded-full w-fit mb-4"
-                      style={{ color: 'hsl(0, 0%, 40%)', backgroundColor: 'hsl(0, 0%, 90%)' }}
+                      style={{ color: 'hsl(210, 30%, 40%)', backgroundColor: 'hsl(210, 30%, 92%)' }}
                     >
                       {project.label}
                     </span>
-                    <h3 className="text-xl md:text-2xl font-semibold" style={{ color: 'hsl(0, 0%, 8%)' }}>{project.title}</h3>
-                    <p className="text-sm mt-1 mb-3" style={{ color: 'hsl(0, 0%, 30%)' }}>{project.subtitle}</p>
-                    <p className="text-sm leading-relaxed mb-5" style={{ color: 'hsl(0, 0%, 40%)' }}>{project.description}</p>
+                    <h3 className="text-xl md:text-2xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>{project.title}</h3>
+                    <p className="text-sm mt-1 mb-3" style={{ color: 'hsl(210, 100%, 28%)' }}>{project.subtitle}</p>
+                    <p className="text-sm leading-relaxed mb-5" style={{ color: 'hsl(210, 20%, 40%)' }}>{project.description}</p>
                     <div className="flex flex-wrap gap-2 mb-5">
                       {project.tech.split(' · ').map((item, idx) => (
                         <span key={idx} className="text-[11px] px-3 py-1 rounded-full"
-                          style={{ color: 'hsl(0, 0%, 40%)', backgroundColor: 'hsl(0, 0%, 90%)' }}
+                          style={{ color: 'hsl(210, 20%, 40%)', backgroundColor: 'hsl(210, 30%, 92%)' }}
                         >
                           {item}
                         </span>
                       ))}
                     </div>
                     <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-colors w-fit"
-                      style={{ backgroundColor: 'hsl(0, 0%, 8%)', color: 'hsl(0, 0%, 100%)', border: '1px solid hsl(0, 0%, 20%)' }}
+                      style={{ backgroundColor: 'hsl(210, 100%, 28%)', color: 'hsl(0, 0%, 100%)', border: '1px solid hsl(210, 100%, 35%)' }}
                     >
                       Tham gia sử dụng chỉ báo
                     </button>
@@ -110,7 +107,7 @@ const IndicatorsSection = () => {
                   <div className="relative h-64 md:h-auto overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0" style={{
-                      boxShadow: 'inset 40px 0 30px -10px hsl(0, 0%, 97%)',
+                      boxShadow: 'inset 40px 0 30px -10px hsl(0, 0%, 98%)',
                     }} />
                   </div>
                 </div>
@@ -136,9 +133,9 @@ const IndicatorsSection = () => {
                 onClick={() => navigate('/indicators')}
                 className="px-8 py-3.5 rounded-full text-base font-semibold shadow-lg transition-shadow hover:shadow-xl cursor-pointer"
                 style={{
-                  backgroundColor: 'hsl(0, 0%, 8%)',
-                  color: 'hsl(0, 0%, 100%)',
-                  border: '2px solid hsl(0, 0%, 25%)',
+                  backgroundColor: 'hsl(48, 100%, 50%)',
+                  color: 'hsl(210, 80%, 8%)',
+                  border: '2px solid hsl(48, 100%, 60%)',
                 }}
               >
                 Sử dụng công cụ →

@@ -124,10 +124,10 @@ const NewsSection = () => {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, hsl(15 25% 5%) 0%, hsl(15 25% 5% / 0.8) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to right, hsl(0 0% 100%) 0%, hsl(0 0% 100% / 0.8) 30%, transparent 100%)' }}
           />
           <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, hsl(15 25% 5%) 0%, hsl(15 25% 5% / 0.8) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to left, hsl(0 0% 100%) 0%, hsl(0 0% 100% / 0.8) 30%, transparent 100%)' }}
           />
 
           <motion.div
