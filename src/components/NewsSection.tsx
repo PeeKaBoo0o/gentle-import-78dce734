@@ -90,7 +90,10 @@ const NewsSection = () => {
   const animDuration = news.length * (1.5 + PAUSE_DURATION);
 
   return (
-    <section id="news" className="section-padding overflow-hidden">
+    <section id="news" className="relative section-padding overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(210 80% 10%) 0%, hsl(210 60% 16%) 50%, hsl(210 80% 10%) 100%)' }}>
+      {/* Accent top border */}
+      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: 'linear-gradient(90deg, transparent, hsl(48 100% 50%), transparent)' }} />
+
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -99,10 +102,12 @@ const NewsSection = () => {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            <span className="text-foreground">Tin Tức</span>{' '}
-            <span className="text-accent italic">Crypto</span>
+          <span className="inline-block text-xs font-mono uppercase tracking-widest text-secondary mb-4 border border-secondary/30 px-4 py-1.5 rounded-full">📰 Cập nhật mới nhất</span>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+            <span className="text-white">Tin Tức</span>{' '}
+            <span style={{ color: 'hsl(48 100% 50%)' }} className="italic">Crypto</span>
           </h2>
+          <p className="text-secondary/80 text-sm mt-3 max-w-md mx-auto">Tổng hợp tin tức crypto nổi bật từ các nguồn uy tín hàng đầu</p>
         </motion.div>
       </div>
 
@@ -124,10 +129,10 @@ const NewsSection = () => {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, hsl(0 0% 100%) 0%, hsl(0 0% 100% / 0.8) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to right, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
           />
           <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, hsl(0 0% 100%) 0%, hsl(0 0% 100% / 0.8) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to left, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
           />
 
           <motion.div
@@ -149,8 +154,8 @@ const NewsSection = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-2xl overflow-hidden border border-border/40 warm-gradient-card hover:border-accent/30 transition-all duration-300 flex-shrink-0"
-                style={{ width: CARD_WIDTH }}
+                className="group block rounded-2xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all duration-300 flex-shrink-0 shadow-lg hover:shadow-accent/10"
+                style={{ width: CARD_WIDTH, background: 'linear-gradient(145deg, hsl(210 50% 14%) 0%, hsl(210 55% 10%) 100%)' }}
               >
                 <div className="relative h-44 overflow-hidden">
                   <img
