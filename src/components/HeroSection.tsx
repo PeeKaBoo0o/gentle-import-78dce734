@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { TrendingUp, Shield, Zap, BarChart3, Users, Clock } from 'lucide-react';
+import { BarChart3, Users, Clock } from 'lucide-react';
+import WireframeMesh from './WireframeMesh';
 
 const stats = [
   { value: '24/7', label: 'Cập nhật liên tục', icon: Clock },
@@ -11,6 +12,9 @@ const stats = [
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background pt-24 pb-16">
+      {/* Wireframe mesh background */}
+      <WireframeMesh />
+
       {/* Ambient glows */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-accent/6 rounded-full blur-[200px] pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/4 rounded-full blur-[150px] pointer-events-none" />
