@@ -22,12 +22,12 @@ const WireframeMesh = () => {
     window.addEventListener('resize', resize);
 
     const points: { x: number; y: number; z: number }[] = [];
-    const numPoints = 350;
+    const numPoints = 280;
 
     for (let i = 0; i < numPoints; i++) {
       const phi = Math.acos(-1 + (2 * i) / numPoints);
       const theta = Math.sqrt(numPoints * Math.PI) * phi;
-      const r = 450 + Math.random() * 80;
+      const r = 350 + Math.random() * 60;
       points.push({
         x: r * Math.cos(theta) * Math.sin(phi),
         y: r * Math.sin(theta) * Math.sin(phi) * 0.6,
