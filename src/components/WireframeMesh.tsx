@@ -66,10 +66,12 @@ const WireframeMesh = () => {
           if (dist < 80) {
             const alpha = (1 - dist / 80) * 0.3;
             if ((i + j) % 17 === 0) {
-              ctx.strokeStyle = `hsla(348, 83%, 55%, ${alpha * 1.5})`;
+              // Accent yellow lines
+              ctx.strokeStyle = `hsla(48, 100%, 50%, ${alpha * 1.5})`;
               ctx.lineWidth = 0.8;
             } else {
-              ctx.strokeStyle = `rgba(180, 180, 180, ${alpha})`;
+              // Light blue lines
+              ctx.strokeStyle = `hsla(197, 43%, 60%, ${alpha})`;
               ctx.lineWidth = 0.4;
             }
             ctx.beginPath();
@@ -82,7 +84,7 @@ const WireframeMesh = () => {
 
       for (const p of projected) {
         const alpha = Math.max(0.1, Math.min(0.6, p.scale * 0.5));
-        ctx.fillStyle = `rgba(200, 200, 200, ${alpha})`;
+        ctx.fillStyle = `hsla(197, 43%, 70%, ${alpha})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 1.2 * p.scale, 0, Math.PI * 2);
         ctx.fill();

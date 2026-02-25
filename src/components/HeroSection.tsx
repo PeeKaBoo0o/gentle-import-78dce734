@@ -12,12 +12,11 @@ const stats = [
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background pt-24 pb-16">
-      {/* Wireframe mesh background */}
       <WireframeMesh />
 
       {/* Ambient glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-accent/6 rounded-full blur-[200px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-accent/4 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] bg-primary/10 rounded-full blur-[200px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/8 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12">
         {/* Badge */}
@@ -27,9 +26,9 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="flex justify-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-foreground/10 border border-foreground/20 rounded-full px-4 py-1.5">
-            <span className="w-2 h-2 rounded-full bg-foreground animate-pulse" />
-            <span className="text-xs font-medium text-foreground/70 tracking-wide uppercase">Live · Đang hoạt động</span>
+          <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5">
+            <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+            <span className="text-xs font-medium text-accent tracking-wide uppercase">Live · Đang hoạt động</span>
           </div>
         </motion.div>
 
@@ -71,7 +70,7 @@ const HeroSection = () => {
           </a>
           <Link
             to="/indicators"
-            className="inline-flex items-center gap-2 border border-border/60 text-foreground font-medium px-8 py-3.5 rounded-full hover:bg-secondary/50 transition-colors text-sm"
+            className="inline-flex items-center gap-2 border border-secondary/40 text-foreground font-medium px-8 py-3.5 rounded-full hover:bg-secondary/10 transition-colors text-sm"
           >
             Khám phá công cụ
           </Link>

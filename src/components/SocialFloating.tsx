@@ -29,13 +29,13 @@ const SocialFloating = () => {
   }, []);
 
   return (
-    <div className="fixed top-[55%] -translate-y-1/2 right-2 z-50 flex flex-col items-center gap-2 rounded-2xl px-1.5 py-3 backdrop-blur-md border border-teal-800/40" style={{ backgroundColor: 'hsl(195 50% 12% / 0.9)' }}>
+    <div className="fixed top-[55%] -translate-y-1/2 right-2 z-50 flex flex-col items-center gap-2 rounded-2xl px-1.5 py-3 backdrop-blur-md border border-border/40" style={{ backgroundColor: 'hsl(210 55% 12% / 0.9)' }}>
       <div
-        className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer border border-teal-400/40"
-        style={{ transform: `rotate(${rotation}deg)`, backgroundColor: 'hsl(195 50% 20%)' }}
+        className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer border border-secondary/40"
+        style={{ transform: `rotate(${rotation}deg)`, backgroundColor: 'hsl(210 55% 20%)' }}
         onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
       >
-        <span className="text-teal-300 font-bold text-[8px] tracking-tight">TBN</span>
+        <span className="text-secondary font-bold text-[8px] tracking-tight">TBN</span>
       </div>
       {[
         { icon: <Send size={15} />, href: 'https://t.me/Alphanetvn' },
