@@ -2,3 +2,6 @@ project_id = "iqhoygutbqzbiwkcvegl"
 
 [functions.fetch-economic-calendar]
 verify_jwt = false
+
+[functions.generate-all-scenarios]
+verify_jwt = false
