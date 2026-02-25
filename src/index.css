@@ -6,44 +6,44 @@
 
 @layer base {
   :root {
-    --background: 15 25% 5%;
-    --foreground: 30 20% 90%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 95%;
 
-    --card: 15 20% 12%;
-    --card-foreground: 30 20% 90%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 15 20% 12%;
-    --popover-foreground: 30 20% 90%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 30 20% 90%;
-    --primary-foreground: 15 25% 8%;
+    --primary: 0 0% 95%;
+    --primary-foreground: 0 0% 5%;
 
-    --secondary: 15 15% 16%;
-    --secondary-foreground: 30 20% 90%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 15 12% 20%;
-    --muted-foreground: 25 15% 55%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 25 90% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 20 15% 18%;
-    --input: 20 15% 18%;
-    --ring: 25 90% 55%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 60%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 15 25% 6%;
-    --sidebar-foreground: 30 20% 90%;
-    --sidebar-primary: 30 20% 90%;
-    --sidebar-primary-foreground: 15 25% 8%;
-    --sidebar-accent: 15 15% 16%;
-    --sidebar-accent-foreground: 30 20% 90%;
-    --sidebar-border: 20 15% 18%;
-    --sidebar-ring: 25 90% 55%;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 0% 95%;
+    --sidebar-primary-foreground: 0 0% 5%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 60%;
   }
 }
 
@@ -91,11 +91,11 @@
   }
 
   .warm-gradient {
-    background: radial-gradient(ellipse at 50% 0%, hsl(25 40% 18%) 0%, hsl(15 25% 5%) 70%);
+    background: radial-gradient(ellipse at 50% 0%, hsl(0 0% 12%) 0%, hsl(0 0% 3%) 70%);
   }
 
   .warm-gradient-card {
-    background: linear-gradient(145deg, hsl(20 20% 14%) 0%, hsl(15 20% 10%) 100%);
+    background: linear-gradient(145deg, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%);
   }
 
   .marquee {
@@ -107,20 +107,20 @@
   }
 
   .bg-warm-yellow {
-    background-color: hsl(42, 35%, 85%);
-    color: hsl(15, 25%, 15%);
+    background-color: hsl(0, 0%, 100%);
+    color: hsl(0, 0%, 8%);
   }
 
   .bg-warm-yellow .text-foreground {
-    color: hsl(15, 25%, 15%);
+    color: hsl(0, 0%, 8%);
   }
 
   .bg-warm-yellow .text-muted-foreground {
-    color: hsl(20, 15%, 40%);
+    color: hsl(0, 0%, 40%);
   }
 
   .bg-warm-yellow .border-border\/40 {
-    border-color: hsl(30, 20%, 70% / 0.4);
+    border-color: hsl(0, 0%, 80% / 0.4);
   }
 }
 
@@ -135,16 +135,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(15 25% 5%);
+  background: hsl(0 0% 3%);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(20 15% 25%);
+  background: hsl(0 0% 20%);
   border-radius: 2px;
 }
 
 /* Selection */
 ::selection {
-  background: hsl(25 90% 55% / 0.3);
+  background: hsl(0 0% 100% / 0.2);
   color: hsl(0 0% 100%);
 }

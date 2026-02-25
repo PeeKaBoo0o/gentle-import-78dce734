@@ -27,9 +27,9 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.2 }}
           className="flex justify-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-emerald-400 tracking-wide uppercase">Live · Đang hoạt động</span>
+          <div className="inline-flex items-center gap-2 bg-foreground/10 border border-foreground/20 rounded-full px-4 py-1.5">
+            <span className="w-2 h-2 rounded-full bg-foreground animate-pulse" />
+            <span className="text-xs font-medium text-foreground/70 tracking-wide uppercase">Live · Đang hoạt động</span>
           </div>
         </motion.div>
 
