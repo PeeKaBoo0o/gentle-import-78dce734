@@ -77,34 +77,36 @@ const CalendarSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="warm-gradient-card rounded-2xl border border-border/40 overflow-hidden"
+          className="rounded-2xl border border-white/10 overflow-hidden"
+          style={{ backgroundColor: 'hsl(215, 30%, 14%)' }}
         >
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-5 h-5 animate-spin text-accent" />
-              <span className="ml-2 text-muted-foreground text-sm">Đang tải...</span>
+            <div className="flex items-center justify-center py-10">
+              <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+              <span className="ml-2 text-white/50 text-xs">Đang tải...</span>
             </div>
           ) : events.length === 0 ? (
-            <p className="text-muted-foreground text-center py-10 text-sm">Kết nối backend để hiển thị lịch kinh tế</p>
+            <p className="text-white/40 text-center py-8 text-xs">Kết nối backend để hiển thị lịch kinh tế</p>
           ) : (
-            <div className="divide-y divide-border/30">
+            <div className="divide-y divide-white/5">
               {events.map((ev, idx) => (
                 <div
                   key={ev.id || idx}
-                  className="hover:bg-secondary/20 transition-colors px-6 py-3 flex items-center gap-3"
+                  className="hover:bg-white/5 transition-colors px-5 py-2 flex items-center gap-3 text-[12px]"
                 >
-                  <div className="flex items-center gap-2 min-w-[70px]">
-                    <span className={`w-2 h-2 rounded-full shrink-0 ${impactDot(ev.impact)}`} />
-                    <span className="text-[12px] text-muted-foreground font-mono">{ev.event_time || '—'}</span>
+                  <div className="flex items-center gap-2 min-w-[65px]">
+                    <span className={`w-[6px] h-[6px] rounded-full shrink-0 ${impactDot(ev.impact)}`} />
+                    <span className="text-amber-400/90 font-mono">{ev.event_time || '—'}</span>
                   </div>
-                  <span className="text-[12px] text-foreground/70 min-w-[40px]">
-                    {currencyFlag[ev.currency || ''] || ''} {ev.currency}
+                  <span className="min-w-[55px] font-medium">
+                    <span className="text-[10px] text-white/40 mr-1">{currencyFlag[ev.currency || ''] || ''}</span>
+                    <span className="text-white/80 font-semibold">{ev.currency}</span>
                   </span>
-                  <span className="flex-1 text-sm text-foreground truncate">{ev.event_name}</span>
-                  <div className="hidden sm:flex items-center gap-3 text-[12px] font-mono">
-                    <span className="text-foreground min-w-[40px] text-right">{ev.actual || '–'}</span>
-                    <span className="text-muted-foreground min-w-[40px] text-right">{ev.forecast || '–'}</span>
-                    <span className="text-muted-foreground/60 min-w-[40px] text-right">{ev.previous || '–'}</span>
+                  <span className="flex-1 text-white/60 truncate">{ev.event_name}</span>
+                  <div className="hidden sm:flex items-center gap-4 font-mono">
+                    <span className="text-white/80 min-w-[40px] text-right">{ev.actual || '–'}</span>
+                    <span className="text-white/40 min-w-[40px] text-right">{ev.forecast || '–'}</span>
+                    <span className="text-white/25 min-w-[40px] text-right">{ev.previous || '–'}</span>
                   </div>
                 </div>
               ))}
