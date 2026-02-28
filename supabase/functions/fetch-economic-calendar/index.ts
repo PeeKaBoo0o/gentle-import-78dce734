@@ -1,8 +1,6 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 interface CalendarEvent {
@@ -23,13 +21,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const today = new Date();
-    const yyyy = today.getUTCFullYear();
-    const mm = String(today.getUTCMonth() + 1).padStart(2, '0');
-    const dd = String(today.getUTCDate()).padStart(2, '0');
-    const dateStr = `${yyyy}-${mm}-${dd}`;
-
-    // Try primary source: Nager.Date public holidays + Trading Economics style
     const url = `https://nfs.faireconomy.media/ff_calendar_thisweek.json`;
 
     const res = await fetch(url, {
@@ -46,15 +37,27 @@ Deno.serve(async (req) => {
       throw new Error('Invalid calendar data format');
     }
 
-    // Filter today's events and map to our format
-    const events: CalendarEvent[] = rawData
-      .filter((item: any) => {
-        if (!item.date) return false;
-        const eventDate = item.date.substring(0, 10);
-        return eventDate === dateStr;
-      })
+    // Get today's date string in UTC
+    const today = new Date();
+    const yyyy = today.getUTCFullYear();
+    const mm = String(today.getUTCMonth() + 1).padStart(2, '0');
+    const dd = String(today.getUTCDate()).padStart(2, '0');
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+
+    // Filter today's events first; if none, show all week events
+    let filtered = rawData.filter((item: any) => {
+      if (!item.date) return false;
+      return item.date.substring(0, 10) === todayStr;
+    });
+
+    // If no events today (weekend, etc.), show all events for the week
+    if (filtered.length === 0) {
+      filtered = rawData;
+    }
+
+    const events: CalendarEvent[] = filtered
       .map((item: any, idx: number) => {
-        const eventDate = item.date ? item.date.substring(0, 10) : dateStr;
+        const eventDate = item.date ? item.date.substring(0, 10) : todayStr;
         const eventTime = item.date ? item.date.substring(11, 16) : null;
         
         let impact: string | null = null;
@@ -82,7 +85,8 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify(events), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (e) {
+    console.error('Calendar fetch error:', e);
     return new Response(JSON.stringify([]), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
