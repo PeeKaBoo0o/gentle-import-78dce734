@@ -18,9 +18,9 @@ const Index = () => {
       <AboutUsSection />
       <IndicatorsSection />
       <div className="bg-warm-yellow">
+        <CalendarSection />
         <NewsSection />
         <AnalysisSection />
-        <CalendarSection />
         <DictionarySection />
         <ScenarioSection />
       </div>
