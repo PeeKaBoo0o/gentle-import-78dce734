@@ -66,8 +66,8 @@ const CalendarSection = () => {
             to="/calendar"
             className="inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-wide group/link"
           >
-            <span className="text-accent">Lịch Kinh Tế</span>
-            <ArrowRight size={20} className="text-accent group-hover/link:translate-x-1 transition-transform" />
+            <span style={{ color: 'hsl(210, 100%, 28%)' }}>Lịch Kinh Tế</span>
+            <ArrowRight size={20} style={{ color: 'hsl(210, 100%, 28%)' }} className="group-hover/link:translate-x-1 transition-transform" />
           </Link>
           <p className="text-sm text-muted-foreground mt-2 capitalize">{todayStr}</p>
         </motion.div>
