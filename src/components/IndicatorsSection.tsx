@@ -42,11 +42,11 @@ const IndicatorsSection = () => {
     offset: ['start start', 'end end'],
   });
 
-  const TARGET_BG = 'hsl(45, 25%, 82%)';
+  const TARGET_BG = 'hsl(0, 0%, 100%)';
   const backgroundColor = useTransform(
     scrollYProgress,
     [0, 0.35, 0.5, 0.58, 0.62, 1],
-    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 30%, 40%)', 'hsl(45, 20%, 75%)', TARGET_BG, TARGET_BG]
+    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 30%, 40%)', 'hsl(0, 0%, 90%)', TARGET_BG, TARGET_BG]
   );
 
   return (
@@ -72,17 +72,17 @@ const IndicatorsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-               className="rounded-2xl overflow-hidden shadow-lg border border-[hsl(45,20%,80%)]/50"
+               className="rounded-2xl overflow-hidden shadow-lg border border-[hsl(210,20%,85%)]/50"
                 style={{
                   transform: `scale(${1 - i * 0.02})`,
                   transformOrigin: 'top center',
-                  backgroundColor: 'hsl(45, 18%, 88%)',
+                  backgroundColor: 'hsl(210, 20%, 95%)',
                 }}
               >
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="p-8 flex flex-col justify-center">
                     <span className="inline-flex items-center gap-2 text-[11px] tracking-wider uppercase px-3 py-1 rounded-full w-fit mb-4"
-                      style={{ color: 'hsl(210, 60%, 35%)', backgroundColor: 'hsl(45, 25%, 88%)' }}
+                      style={{ color: 'hsl(210, 60%, 35%)', backgroundColor: 'hsl(210, 20%, 92%)' }}
                     >
                       {project.label}
                     </span>
@@ -92,7 +92,7 @@ const IndicatorsSection = () => {
                     <div className="flex flex-wrap gap-2 mb-5">
                       {project.tech.split(' · ').map((item, idx) => (
                         <span key={idx} className="text-[11px] px-3 py-1 rounded-full"
-                          style={{ color: 'hsl(210, 20%, 40%)', backgroundColor: 'hsl(45, 25%, 88%)' }}
+                          style={{ color: 'hsl(210, 20%, 40%)', backgroundColor: 'hsl(210, 20%, 92%)' }}
                         >
                           {item}
                         </span>
@@ -107,7 +107,7 @@ const IndicatorsSection = () => {
                   <div className="relative h-64 md:h-auto overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0" style={{
-                      boxShadow: 'inset 40px 0 30px -10px hsl(45, 18%, 88%)',
+                      boxShadow: 'inset 40px 0 30px -10px hsl(210, 20%, 95%)',
                     }} />
                   </div>
                 </div>
