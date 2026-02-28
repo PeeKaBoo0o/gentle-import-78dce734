@@ -42,11 +42,11 @@ const IndicatorsSection = () => {
     offset: ['start start', 'end end'],
   });
 
-  const TARGET_BG = 'hsl(45, 30%, 92%)';
+  const TARGET_BG = 'hsl(45, 25%, 82%)';
   const backgroundColor = useTransform(
     scrollYProgress,
     [0, 0.35, 0.5, 0.58, 0.62, 1],
-    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 30%, 40%)', 'hsl(45, 25%, 85%)', TARGET_BG, TARGET_BG]
+    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 30%, 40%)', 'hsl(45, 20%, 75%)', TARGET_BG, TARGET_BG]
   );
 
   return (
@@ -76,7 +76,7 @@ const IndicatorsSection = () => {
                 style={{
                   transform: `scale(${1 - i * 0.02})`,
                   transformOrigin: 'top center',
-                  backgroundColor: 'hsl(45, 20%, 96%)',
+                  backgroundColor: 'hsl(45, 18%, 88%)',
                 }}
               >
                 <div className="grid md:grid-cols-2 gap-0">
@@ -107,7 +107,7 @@ const IndicatorsSection = () => {
                   <div className="relative h-64 md:h-auto overflow-hidden">
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                     <div className="absolute inset-0" style={{
-                      boxShadow: 'inset 40px 0 30px -10px hsl(45, 20%, 96%)',
+                      boxShadow: 'inset 40px 0 30px -10px hsl(45, 18%, 88%)',
                     }} />
                   </div>
                 </div>
