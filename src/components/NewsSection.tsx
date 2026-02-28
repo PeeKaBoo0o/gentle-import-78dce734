@@ -154,37 +154,41 @@ const NewsSection = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-2xl overflow-hidden border border-white/10 hover:border-accent/40 transition-all duration-300 flex-shrink-0 shadow-lg hover:shadow-accent/10"
-                style={{ width: CARD_WIDTH, background: 'linear-gradient(145deg, hsl(210 50% 14%) 0%, hsl(210 55% 10%) 100%)' }}
+                className="group block rounded-2xl overflow-hidden border border-white/15 hover:border-amber-400/50 transition-all duration-300 flex-shrink-0 hover:-translate-y-1"
+                style={{
+                  width: CARD_WIDTH,
+                  background: 'linear-gradient(145deg, hsl(210 50% 16%) 0%, hsl(210 55% 11%) 100%)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+                }}
               >
                 <div className="relative h-44 overflow-hidden">
                   <img
                     src={item.imageurl}
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     loading="lazy"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = '/placeholder.svg';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent" />
-                  <div className="absolute top-3 right-3">
-                    <ExternalLink size={14} className="text-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[hsl(210,55%,8%)] via-transparent to-transparent" />
+                  <div className="absolute top-3 right-3 bg-white/10 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ExternalLink size={12} className="text-white/80" />
                   </div>
-                  <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-wider text-accent bg-background/60 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                  <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wider text-amber-300 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-amber-400/20">
                     {item.source}
                   </span>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-sm font-medium text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+                  <h3 className="text-[13px] font-semibold text-white leading-snug mb-2 line-clamp-2 group-hover:text-amber-300 transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-3">
+                  <p className="text-xs text-white/50 leading-relaxed line-clamp-2 mb-3">
                     {item.body}
                   </p>
-                  <div className="flex items-center gap-1.5 text-muted-foreground/60">
+                  <div className="flex items-center gap-1.5 text-amber-400/50">
                     <Clock size={11} />
-                    <span className="text-[10px]">{formatTimeAgo(item.published_on)}</span>
+                    <span className="text-[10px] font-mono">{formatTimeAgo(item.published_on)}</span>
                   </div>
                 </div>
               </a>
