@@ -30,6 +30,8 @@ const currencyFlag: Record<string, string> = {
   CAD: '🇨🇦', CHF: '🇨🇭', CNY: '🇨🇳', NZD: '🇳🇿', KRW: '🇰🇷',
 };
 
+const MAX_PREVIEW = 8;
+
 const CalendarSection = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +91,7 @@ const CalendarSection = () => {
             <p className="text-white/40 text-center py-8 text-xs">Kết nối backend để hiển thị lịch kinh tế</p>
           ) : (
             <div className="divide-y divide-white/5">
-              {events.map((ev, idx) => (
+              {events.slice(0, MAX_PREVIEW).map((ev, idx) => (
                 <div
                   key={ev.id || idx}
                   className="hover:bg-white/5 transition-colors px-5 py-2 flex items-center gap-3 text-[12px]"
@@ -111,6 +113,15 @@ const CalendarSection = () => {
                 </div>
               ))}
             </div>
+          )}
+          {!loading && events.length > 0 && (
+            <Link
+              to="/calendar"
+              className="flex items-center justify-center gap-2 py-3 text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors border-t border-white/5"
+            >
+              Xem chi tiết
+              <ArrowRight size={14} />
+            </Link>
           )}
         </motion.div>
       </div>
