@@ -59,7 +59,7 @@ const AnalysisSection = () => {
             <span className="text-accent">Phân Tích Crypto</span>
             <ArrowRight size={20} className="text-accent group-hover/link:translate-x-1 transition-transform" />
           </Link>
-          <p className="text-muted-foreground text-sm max-w-xl mx-auto mt-3">
+          <p className="text-sm max-w-xl mx-auto mt-3" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Tổng hợp phân tích thị trường crypto từ nhiều góc nhìn — kỹ thuật, on-chain và macro.
           </p>
         </motion.div>
@@ -84,10 +84,10 @@ const AnalysisSection = () => {
               <span className="inline-block text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-accent/15 text-accent border border-accent/25">
                 {featured.tag}
               </span>
-              <h3 className="text-xl md:text-2xl font-bold text-foreground leading-tight">
+              <h3 className="text-xl md:text-2xl font-bold leading-tight" style={{ color: 'hsl(210, 20%, 93%)' }}>
                 {featured.title}
               </h3>
-              <p className="text-muted-foreground text-sm md:text-base leading-relaxed max-w-2xl">
+              <p className="text-sm md:text-base leading-relaxed max-w-2xl" style={{ color: 'hsl(210, 20%, 65%)' }}>
                 {featured.description}
               </p>
             </div>
@@ -111,8 +111,8 @@ const AnalysisSection = () => {
                 <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-4 group-hover/card:bg-accent/20 transition-colors">
                   <Icon className="w-5 h-5 text-accent" />
                 </div>
-                <h4 className="text-sm font-semibold text-foreground mb-2">{topic.title}</h4>
-                <p className="text-muted-foreground text-xs leading-relaxed">{topic.description}</p>
+                <h4 className="text-sm font-semibold mb-2" style={{ color: 'hsl(210, 20%, 93%)' }}>{topic.title}</h4>
+                <p className="text-xs leading-relaxed" style={{ color: 'hsl(210, 20%, 60%)' }}>{topic.description}</p>
               </motion.div>
             );
           })}
