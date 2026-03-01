@@ -9,6 +9,7 @@ import IndicatorsSection from '@/components/IndicatorsSection';
 import CalendarSection from '@/components/CalendarSection';
 import DictionarySection from '@/components/DictionarySection';
 import SocialFloating from '@/components/SocialFloating';
+import ScrollToTop from '@/components/ScrollToTop';
 import { supabase } from '@/integrations/supabase/client';
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <SocialFloating />
+      <ScrollToTop />
       <HeroSection />
       <AboutUsSection />
       <IndicatorsSection />
