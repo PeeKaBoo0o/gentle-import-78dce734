@@ -50,7 +50,21 @@ const formatDateHeading = (dateStr: string) => {
 
 type TabKey = 'all' | 'today' | 'tomorrow' | 'yesterday';
 
-const EventTable = ({ events }: { events: CalendarEvent[] }) => {
+const getEmptyMessage = (tab: TabKey) => {
+  const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
+  if (tab === 'today' && (dayOfWeek === 0 || dayOfWeek === 6)) {
+    return 'Hôm nay là cuối tuần — thị trường không có sự kiện kinh tế.';
+  }
+  if (tab === 'yesterday' && (dayOfWeek === 0 || dayOfWeek === 1)) {
+    return 'Hôm qua là cuối tuần — thị trường không có sự kiện kinh tế.';
+  }
+  if (tab === 'tomorrow' && (dayOfWeek === 5 || dayOfWeek === 6)) {
+    return 'Ngày mai là cuối tuần — thị trường không có sự kiện kinh tế.';
+  }
+  return 'Không có sự kiện nào cho ngày này. Dữ liệu sẽ được cập nhật khi có lịch mới.';
+};
+
+const EventTable = ({ events, emptyMessage }: { events: CalendarEvent[]; emptyMessage: string }) => {
   const grouped = useMemo(() => {
     return events.reduce<Record<string, CalendarEvent[]>>((acc, ev) => {
       if (!acc[ev.event_date]) acc[ev.event_date] = [];
@@ -60,7 +74,12 @@ const EventTable = ({ events }: { events: CalendarEvent[] }) => {
   }, [events]);
 
   if (events.length === 0) {
-    return <p className="text-center text-muted-foreground py-16">Không có sự kiện nào</p>;
+    return (
+      <div className="text-center py-16 space-y-2">
+        <p className="text-muted-foreground">📅 {emptyMessage}</p>
+        <p className="text-xs text-muted-foreground/60">Chuyển sang tab "Tất cả" để xem toàn bộ lịch có sẵn.</p>
+      </div>
+    );
   }
 
   return (
@@ -280,7 +299,7 @@ const Calendar = () => {
               <span className="ml-2 text-muted-foreground text-sm">Đang tải dữ liệu...</span>
             </div>
           ) : (
-            <EventTable events={filteredEvents} />
+            <EventTable events={filteredEvents} emptyMessage={getEmptyMessage(tab)} />
           )}
         </div>
       </main>

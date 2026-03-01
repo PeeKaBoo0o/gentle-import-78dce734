@@ -57,12 +57,17 @@ Deno.serve(async (req) => {
 
     const results = await Promise.allSettled(
       urls.map(({ url }) =>
-        fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }).then(r => r.ok ? r.json() : [])
+        fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }).then(r => {
+          console.log(`Fetch ${url}: status=${r.status}`);
+          return r.ok ? r.json() : [];
+        })
       )
     );
 
     let allEvents: CalendarEvent[] = [];
     results.forEach((result, i) => {
+      const count = result.status === 'fulfilled' && Array.isArray(result.value) ? result.value.length : 0;
+      console.log(`Source ${urls[i].prefix}: ${result.status}, count=${count}`);
       if (result.status === 'fulfilled' && Array.isArray(result.value)) {
         allEvents = allEvents.concat(parseRawEvents(result.value, urls[i].prefix));
       }
