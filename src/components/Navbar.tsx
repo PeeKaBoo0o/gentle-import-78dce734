@@ -44,8 +44,8 @@ const Navbar = () => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 bg-background/60 backdrop-blur-xl border-b border-border/30 transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
-      <div className="max-w-7xl mx-auto flex items-center justify-center relative">
-        <div className="absolute left-0 flex items-center cursor-pointer -my-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="flex items-center cursor-pointer -my-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <img src={tbnClean} alt="TBN" className="h-16 w-auto" style={{ filter: 'brightness(1.5) sepia(0.3) saturate(1.2)' }} />
         </div>
 
@@ -57,7 +57,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <button className="md:hidden text-foreground absolute right-0" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden text-foreground" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
