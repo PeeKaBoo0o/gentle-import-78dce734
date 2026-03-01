@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import Indicators from "./pages/Indicators";
 import News from "./pages/News";
 import Scenarios from "./pages/Scenarios";
+import Calendar from "./pages/Calendar";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/indicators" element={<Indicators />} />
           <Route path="/news" element={<News />} />
           <Route path="/scenarios" element={<Scenarios />} />
+          <Route path="/calendar" element={<Calendar />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
