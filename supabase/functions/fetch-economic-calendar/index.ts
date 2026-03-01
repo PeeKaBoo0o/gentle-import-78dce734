@@ -50,6 +50,7 @@ Deno.serve(async (req) => {
 
   try {
     const urls = [
+      { url: 'https://nfs.faireconomy.media/ff_calendar_lastweek.json', prefix: 'lw' },
       { url: 'https://nfs.faireconomy.media/ff_calendar_thisweek.json', prefix: 'tw' },
       { url: 'https://nfs.faireconomy.media/ff_calendar_nextweek.json', prefix: 'nw' },
     ];
