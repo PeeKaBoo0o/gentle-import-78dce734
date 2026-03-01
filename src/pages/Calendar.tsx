@@ -120,8 +120,8 @@ const EventTable = ({ events, emptyMessage }: { events: CalendarEvent[]; emptyMe
                     <span className="text-foreground font-semibold">{ev.currency}</span>
                   </span>
                   <span className="flex-1 text-muted-foreground truncate">
-                    {ev.source === 'coinmarketcal' && <span className="text-[9px] bg-amber-500/15 text-amber-600 dark:text-amber-400 px-1 py-0.5 rounded mr-1.5 font-semibold">CRYPTO</span>}
-                    {ev.source === 'tradingview' && <span className="text-[9px] bg-blue-500/15 text-blue-600 dark:text-blue-400 px-1 py-0.5 rounded mr-1.5 font-semibold">MACRO</span>}
+                    {ev.source === 'coinmarketcal' && <span className="text-[9px] bg-amber-500/15 text-amber-600 dark:text-amber-400 px-1 py-0.5 rounded mr-1.5 font-semibold">TIỀN SỐ</span>}
+                    {ev.source === 'tradingview' && <span className="text-[9px] bg-blue-500/15 text-blue-600 dark:text-blue-400 px-1 py-0.5 rounded mr-1.5 font-semibold">VĨ MÔ</span>}
                     {ev.event_name}
                   </span>
                   <div className="hidden sm:flex items-center gap-0 font-mono">
@@ -303,8 +303,8 @@ const Calendar = () => {
           <div className="flex gap-2 mb-6 flex-wrap">
             {[
               { key: null, label: 'Tất cả nguồn' },
-              { key: 'tradingview', label: '📊 Vĩ mô (TradingView)' },
-              { key: 'coinmarketcal', label: '🪙 Crypto (CoinMarketCal)' },
+              { key: 'tradingview', label: '📊 Vĩ mô' },
+              { key: 'coinmarketcal', label: '🪙 Tiền số' },
             ].map(f => (
               <button
                 key={f.key || 'all-source'}

@@ -230,6 +230,71 @@ async function fetchCoinMarketCal(): Promise<CalendarEvent[]> {
     });
 }
 
+// ── Translate event names to Vietnamese ────────────────────────
+async function translateEventNames(events: CalendarEvent[]): Promise<CalendarEvent[]> {
+  if (events.length === 0) return events;
+
+  const apiKey = Deno.env.get('LOVABLE_API_KEY');
+  if (!apiKey) {
+    console.warn('LOVABLE_API_KEY not set, skipping translation');
+    return events;
+  }
+
+  // Collect unique event names to translate
+  const uniqueNames = [...new Set(events.map(e => e.event_name))];
+  const batchSize = 50;
+  const translationMap: Record<string, string> = {};
+
+  for (let i = 0; i < uniqueNames.length; i += batchSize) {
+    const batch = uniqueNames.slice(i, i + batchSize);
+    const numbered = batch.map((n, idx) => `${idx + 1}. ${n}`).join('\n');
+
+    try {
+      const res = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash-lite',
+          messages: [
+            {
+              role: 'system',
+              content: 'Bạn là dịch giả chuyên ngành tài chính. Dịch tên sự kiện kinh tế từ tiếng Anh sang tiếng Việt. Trả về đúng định dạng: mỗi dòng là "số. bản dịch". Không thêm giải thích. Giữ nguyên các từ viết tắt phổ biến như GDP, CPI, PMI, PPI, NFP, FOMC, ECB, BOJ, RBA, FED. Giữ nguyên tên riêng và tên coin crypto.',
+            },
+            { role: 'user', content: numbered },
+          ],
+        }),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const text = json.choices?.[0]?.message?.content || '';
+        const lines = text.split('\n').filter((l: string) => l.trim());
+        for (const line of lines) {
+          const match = line.match(/^(\d+)\.\s*(.+)/);
+          if (match) {
+            const idx = parseInt(match[1]) - 1;
+            if (idx >= 0 && idx < batch.length) {
+              translationMap[batch[idx]] = match[2].trim();
+            }
+          }
+        }
+      } else {
+        console.warn('Translation API error:', res.status);
+      }
+    } catch (e) {
+      console.warn('Translation error:', e);
+    }
+  }
+
+  return events.map(ev => ({
+    ...ev,
+    event_name: translationMap[ev.event_name] || ev.event_name,
+  }));
+}
+
 // ── Main ───────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -252,7 +317,10 @@ Deno.serve(async (req) => {
       return da.localeCompare(db);
     });
 
-    return new Response(JSON.stringify(allEvents), {
+    // Translate event names to Vietnamese
+    const translatedEvents = await translateEventNames(allEvents);
+
+    return new Response(JSON.stringify(translatedEvents), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
