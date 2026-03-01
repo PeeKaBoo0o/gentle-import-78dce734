@@ -21,6 +21,7 @@ interface CalendarEvent {
   actual: string | null;
   forecast: string | null;
   previous: string | null;
+  source?: 'tradingview' | 'coinmarketcal';
 }
 
 const impactLabel = (impact: string | null) => {
@@ -118,7 +119,11 @@ const EventTable = ({ events, emptyMessage }: { events: CalendarEvent[]; emptyMe
                     <span className="text-[10px] text-muted-foreground mr-1">{currencyFlag[ev.currency || ''] || ''}</span>
                     <span className="text-foreground font-semibold">{ev.currency}</span>
                   </span>
-                  <span className="flex-1 text-muted-foreground truncate">{ev.event_name}</span>
+                  <span className="flex-1 text-muted-foreground truncate">
+                    {ev.source === 'coinmarketcal' && <span className="text-[9px] bg-amber-500/15 text-amber-600 dark:text-amber-400 px-1 py-0.5 rounded mr-1.5 font-semibold">CRYPTO</span>}
+                    {ev.source === 'tradingview' && <span className="text-[9px] bg-blue-500/15 text-blue-600 dark:text-blue-400 px-1 py-0.5 rounded mr-1.5 font-semibold">MACRO</span>}
+                    {ev.event_name}
+                  </span>
                   <div className="hidden sm:flex items-center gap-0 font-mono">
                     <span className="text-foreground min-w-[50px] text-right">{ev.actual || '–'}</span>
                     <span className="text-muted-foreground min-w-[50px] text-right">{ev.forecast || '–'}</span>
@@ -139,6 +144,7 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<TabKey>('all');
   const [filter, setFilter] = useState<string | null>(null);
+  const [sourceFilter, setSourceFilter] = useState<string | null>(null);
   const [pickerDate, setPickerDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
@@ -181,8 +187,9 @@ const Calendar = () => {
         }
         break;
     }
-    return filter ? base.filter(ev => ev.impact === filter) : base;
-  }, [events, tab, filter, pickerDate, todayStr, yesterdayStr, tomorrowStr]);
+    let result = filter ? base.filter(ev => ev.impact === filter) : base;
+    return sourceFilter ? result.filter(ev => ev.source === sourceFilter) : result;
+  }, [events, tab, filter, sourceFilter, pickerDate, todayStr, yesterdayStr, tomorrowStr]);
 
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'all', label: 'Tất cả' },
@@ -283,6 +290,28 @@ const Calendar = () => {
                 className={cn(
                   'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
                   filter === f.key
+                    ? 'bg-primary text-primary-foreground border-transparent'
+                    : 'border-border text-muted-foreground hover:border-foreground/30'
+                )}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Source filter */}
+          <div className="flex gap-2 mb-6 flex-wrap">
+            {[
+              { key: null, label: 'Tất cả nguồn' },
+              { key: 'tradingview', label: '📊 Vĩ mô (TradingView)' },
+              { key: 'coinmarketcal', label: '🪙 Crypto (CoinMarketCal)' },
+            ].map(f => (
+              <button
+                key={f.key || 'all-source'}
+                onClick={() => setSourceFilter(f.key)}
+                className={cn(
+                  'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                  sourceFilter === f.key
                     ? 'bg-primary text-primary-foreground border-transparent'
                     : 'border-border text-muted-foreground hover:border-foreground/30'
                 )}
