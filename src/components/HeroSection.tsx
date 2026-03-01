@@ -61,13 +61,13 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.65 }}
           className="flex flex-wrap justify-center gap-4 mb-16"
         >
-          <a
-            href="#scenarios"
+          <Link
+            to="/scenarios"
             className="inline-flex items-center gap-2 bg-accent text-accent-foreground font-semibold px-8 py-3.5 rounded-full hover:brightness-110 transition-all text-sm"
           >
             Xem kịch bản hôm nay
             <span>→</span>
-          </a>
+          </Link>
           <Link
             to="/indicators"
             className="inline-flex items-center gap-2 border border-secondary/40 text-foreground font-medium px-8 py-3.5 rounded-full hover:bg-secondary/10 transition-colors text-sm"
