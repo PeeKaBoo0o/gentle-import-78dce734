@@ -34,7 +34,7 @@ const Navbar = () => {
   };
 
   const links = [
-    { label: 'Kịch bản', id: 'scenarios', route: '/scenarios' },
+    { label: 'Kịch bản', id: 'scenarios' },
     { label: 'Tin Tức', id: 'news' },
     { label: 'Phân tích', id: 'analysis' },
     { label: 'Indicators', id: 'indicators' },
