@@ -106,8 +106,8 @@ const CalendarSection = () => {
                     <span className="text-white/80 font-semibold">{ev.currency}</span>
                   </span>
                   <span className="flex-1 text-white/60 truncate">
-                    {ev.source === 'coinmarketcal' && <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1 py-0.5 rounded mr-1.5">CRYPTO</span>}
-                    {ev.source === 'tradingview' && <span className="text-[9px] bg-blue-500/20 text-blue-400 px-1 py-0.5 rounded mr-1.5">MACRO</span>}
+                    {ev.source === 'coinmarketcal' && <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1 py-0.5 rounded mr-1.5">TIỀN SỐ</span>}
+                    {ev.source === 'tradingview' && <span className="text-[9px] bg-blue-500/20 text-blue-400 px-1 py-0.5 rounded mr-1.5">VĨ MÔ</span>}
                     {ev.event_name}
                   </span>
                   <div className="hidden sm:flex items-center gap-4 font-mono">
