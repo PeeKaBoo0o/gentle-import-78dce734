@@ -34,12 +34,12 @@ const Navbar = () => {
   };
 
   const links = [
-    { label: 'Kịch bản', id: 'scenarios' },
-    { label: 'Tin Tức', id: 'news' },
-    { label: 'Phân tích', id: 'analysis' },
     { label: 'Indicators', id: 'indicators' },
     { label: 'Lịch Kinh Tế', id: 'calendar' },
+    { label: 'Tin Tức', id: 'news' },
+    { label: 'Phân tích', id: 'analysis' },
     { label: 'Contact', id: 'contact' },
+    { label: 'Kịch bản', id: 'scenarios' },
   ];
 
   return (
