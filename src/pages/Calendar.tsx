@@ -36,19 +36,19 @@ const formatDate = (dateStr: string) => {
   return d.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' });
 };
 
-type DateTab = 'yesterday' | 'today' | 'tomorrow' | 'week';
-
-const getDateStr = (offset: number) => {
-  const d = new Date();
-  d.setDate(d.getDate() + offset);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const formatShortDate = (dateStr: string) => {
+  const d = new Date(dateStr + 'T00:00:00');
+  const weekday = d.toLocaleDateString('vi-VN', { weekday: 'short' });
+  const day = d.getDate();
+  const month = d.getMonth() + 1;
+  return `${weekday} ${day}/${month}`;
 };
 
 const Calendar = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
-  const [tab, setTab] = useState<DateTab>('week');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null); // null = all
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -64,18 +64,12 @@ const Calendar = () => {
     fetchEvents();
   }, []);
 
-  const yesterdayStr = getDateStr(-1);
-  const todayStr = getDateStr(0);
-  const tomorrowStr = getDateStr(1);
+  // Get unique dates from data
+  const uniqueDates = [...new Set(events.map(ev => ev.event_date))].sort();
 
-  const tabFilteredEvents = (() => {
-    switch (tab) {
-      case 'yesterday': return events.filter(ev => ev.event_date === yesterdayStr);
-      case 'today': return events.filter(ev => ev.event_date === todayStr);
-      case 'tomorrow': return events.filter(ev => ev.event_date === tomorrowStr);
-      case 'week': return events;
-    }
-  })();
+  const tabFilteredEvents = selectedDate
+    ? events.filter(ev => ev.event_date === selectedDate)
+    : events;
 
   const filteredEvents = filter
     ? tabFilteredEvents.filter(ev => ev.impact === filter)
@@ -88,20 +82,6 @@ const Calendar = () => {
     acc[date].push(ev);
     return acc;
   }, {});
-
-  const tabCounts: Record<DateTab, number> = {
-    yesterday: events.filter(ev => ev.event_date === yesterdayStr).length,
-    today: events.filter(ev => ev.event_date === todayStr).length,
-    tomorrow: events.filter(ev => ev.event_date === tomorrowStr).length,
-    week: events.length,
-  };
-
-  const tabs: { key: DateTab; label: string }[] = [
-    { key: 'yesterday', label: 'Hôm qua' },
-    { key: 'today', label: 'Hôm nay' },
-    { key: 'tomorrow', label: 'Ngày mai' },
-    { key: 'week', label: 'Tuần này' },
-  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'hsl(0, 0%, 100%)' }}>
@@ -129,29 +109,50 @@ const Calendar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="flex gap-1 mb-5 p-1 rounded-lg bg-gray-100 w-fit"
+            className="flex gap-1 mb-5 p-1 rounded-lg bg-gray-100 w-fit overflow-x-auto"
           >
-            {tabs.map(t => (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                  tab === t.key
-                    ? 'text-white shadow-sm'
-                    : 'text-gray-500 hover:text-gray-800'
-                }`}
-                style={tab === t.key ? { backgroundColor: 'hsl(210, 100%, 28%)' } : {}}
-              >
-                {t.label}
-                {!loading && (
-                  <span className={`text-[10px] rounded-full px-1.5 py-0.5 font-mono ${
-                    tab === t.key ? 'bg-white/20' : 'bg-gray-200 text-gray-500'
-                  }`}>
-                    {tabCounts[t.key]}
-                  </span>
-                )}
-              </button>
-            ))}
+            <button
+              onClick={() => setSelectedDate(null)}
+              className={`px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                selectedDate === null
+                  ? 'text-white shadow-sm'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
+              style={selectedDate === null ? { backgroundColor: 'hsl(210, 100%, 28%)' } : {}}
+            >
+              Tất cả
+              {!loading && (
+                <span className={`text-[10px] rounded-full px-1.5 py-0.5 font-mono ${
+                  selectedDate === null ? 'bg-white/20' : 'bg-gray-200 text-gray-500'
+                }`}>
+                  {events.length}
+                </span>
+              )}
+            </button>
+            {uniqueDates.map(date => {
+              const count = events.filter(ev => ev.event_date === date).length;
+              return (
+                <button
+                  key={date}
+                  onClick={() => setSelectedDate(date)}
+                  className={`px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                    selectedDate === date
+                      ? 'text-white shadow-sm'
+                      : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                  style={selectedDate === date ? { backgroundColor: 'hsl(210, 100%, 28%)' } : {}}
+                >
+                  {formatShortDate(date)}
+                  {!loading && (
+                    <span className={`text-[10px] rounded-full px-1.5 py-0.5 font-mono ${
+                      selectedDate === date ? 'bg-white/20' : 'bg-gray-200 text-gray-500'
+                    }`}>
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </motion.div>
 
           {/* Impact Filter */}
