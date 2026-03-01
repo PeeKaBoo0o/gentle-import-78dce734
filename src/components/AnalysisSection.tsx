@@ -1,35 +1,56 @@
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, TrendingUp, BarChart3, Shield, Target, Zap, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const principles = [
+const analysisTopics = [
   {
     number: '01',
-    title: 'Privacy is not a feature. It\'s the default.',
-    description: 'Every tool I ship runs on your machine. Your documents, your models, your data. No server ever sees it.',
+    icon: TrendingUp,
+    title: 'Phân tích xu hướng thị trường',
+    description: 'Đánh giá xu hướng tổng quan của BTC, ETH và các altcoin chính dựa trên cấu trúc thị trường, dòng tiền và tâm lý nhà đầu tư.',
   },
   {
     number: '02',
-    title: 'Ship fast. Fix in public.',
-    description: '46 releases of RLama. 1,100 stars. The best version is the one someone can use today, not the perfect one that never ships.',
+    icon: BarChart3,
+    title: 'Phân tích kỹ thuật chuyên sâu',
+    description: 'Sử dụng các mô hình Price Action, Supply/Demand, Order Block và Smart Money Concepts để xác định vùng giá quan trọng.',
   },
   {
     number: '03',
-    title: 'Good tools stay out of the way.',
-    description: 'A CLI you reach for without thinking. A memory app that just works in the background. The less you notice, the better I did.',
+    icon: Shield,
+    title: 'Quản trị rủi ro & vốn',
+    description: 'Hướng dẫn xây dựng kế hoạch quản lý vốn, đặt SL/TP hợp lý và kiểm soát cảm xúc khi giao dịch.',
+  },
+  {
+    number: '04',
+    icon: Target,
+    title: 'Xác định vùng Entry tối ưu',
+    description: 'Phân tích các vùng giá tiềm năng để vào lệnh dựa trên confluence của nhiều yếu tố kỹ thuật và on-chain.',
+  },
+  {
+    number: '05',
+    icon: Zap,
+    title: 'Tin tức & sự kiện tác động',
+    description: 'Cập nhật và phân tích các sự kiện macro, quyết định lãi suất, CPI và ảnh hưởng đến thị trường crypto.',
+  },
+  {
+    number: '06',
+    icon: BookOpen,
+    title: 'Kiến thức nền tảng',
+    description: 'Chia sẻ kiến thức về blockchain, tokenomics, DeFi và các khái niệm cốt lõi giúp trader hiểu sâu thị trường.',
   },
 ];
 
 const AnalysisSection = () => {
   return (
     <section id="analysis" className="section-padding" style={{ backgroundColor: 'hsl(210, 80%, 6%)' }}>
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+          className="mb-12 text-center"
         >
           <Link
             to="/analysis"
@@ -38,29 +59,38 @@ const AnalysisSection = () => {
             <span className="text-accent">Phân Tích Crypto</span>
             <ArrowRight size={20} className="text-accent group-hover/link:translate-x-1 transition-transform" />
           </Link>
+          <p className="text-muted-foreground text-sm max-w-xl mx-auto mt-3">
+            Tổng hợp phân tích thị trường crypto từ nhiều góc nhìn — kỹ thuật, on-chain và macro — giúp bạn ra quyết định giao dịch sáng suốt hơn.
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {principles.map((p, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              className="warm-gradient-card rounded-2xl p-8 border border-border/40 hover:border-accent/30 transition-colors"
-            >
-              <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent/15 text-accent font-semibold text-sm mb-5">
-                {p.number}
-              </span>
-              <h3 className="text-lg font-semibold text-foreground mb-3 leading-snug">
-                {p.title}
-              </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {p.description}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {analysisTopics.map((topic, i) => {
+            const Icon = topic.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="warm-gradient-card rounded-2xl p-7 border border-border/40 hover:border-accent/30 transition-all group cursor-default"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent/15 text-accent">
+                    <Icon className="w-5 h-5" />
+                  </span>
+                  <span className="text-xs font-mono text-muted-foreground">{topic.number}</span>
+                </div>
+                <h3 className="text-base font-semibold text-foreground mb-2 leading-snug">
+                  {topic.title}
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {topic.description}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
