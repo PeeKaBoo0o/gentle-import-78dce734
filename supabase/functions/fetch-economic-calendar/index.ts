@@ -16,89 +16,59 @@ interface CalendarEvent {
   source: 'tradingview' | 'coinmarketcal';
 }
 
-// ── CoinMarketCal ──────────────────────────────────────────────
-async function fetchCoinMarketCal(): Promise<CalendarEvent[]> {
-  const apiKey = Deno.env.get('COINMARKETCAL_API_KEY');
-  if (!apiKey) {
-    console.error('COINMARKETCAL_API_KEY not configured');
-    return [];
-  }
+const extractionSchema = {
+  type: 'object',
+  properties: {
+    events: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          date: { type: 'string', description: 'Event date in YYYY-MM-DD format' },
+          time: { type: 'string', description: 'Event time in HH:MM format, or null' },
+          currency: { type: 'string', description: 'Currency code like USD, EUR, GBP, JPY etc.' },
+          name: { type: 'string', description: 'Name of the economic event' },
+          impact: { type: 'string', description: 'Impact level: high, medium, or low' },
+          actual: { type: 'string', description: 'Actual value if available' },
+          forecast: { type: 'string', description: 'Forecast value if available' },
+          previous: { type: 'string', description: 'Previous value if available' },
+        },
+        required: ['date', 'name'],
+      },
+    },
+  },
+  required: ['events'],
+};
 
-  try {
-    const today = new Date();
-    const dateFrom = new Date(today);
-    dateFrom.setDate(today.getDate() - 7);
-    const dateTo = new Date(today);
-    dateTo.setDate(today.getDate() + 14);
+const cryptoExtractionSchema = {
+  type: 'object',
+  properties: {
+    events: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          date: { type: 'string', description: 'Event date in YYYY-MM-DD format' },
+          coins: { type: 'string', description: 'Coin symbols like BTC, ETH, etc.' },
+          title: { type: 'string', description: 'Event title/description' },
+          categories: { type: 'string', description: 'Event category like listing, airdrop, fork, etc.' },
+          confidence: { type: 'string', description: 'Confidence percentage if shown' },
+        },
+        required: ['date', 'title'],
+      },
+    },
+  },
+  required: ['events'],
+};
 
-    const fmt = (d: Date) => d.toISOString().substring(0, 10);
-
-    const url = `https://developers.coinmarketcal.com/v1/events?max=75&dateRangeStart=${fmt(dateFrom)}&dateRangeEnd=${fmt(dateTo)}`;
-    console.log('CoinMarketCal fetch:', url);
-
-    const res = await fetch(url, {
-      headers: { 'x-api-key': apiKey, 'Accept': 'application/json' },
-    });
-
-    console.log('CoinMarketCal status:', res.status);
-    if (!res.ok) {
-      const text = await res.text();
-      console.error('CoinMarketCal error body:', text.substring(0, 300));
-      return [];
-    }
-
-    const json = await res.json();
-    const items = json.body || json.data || json;
-    if (!Array.isArray(items)) {
-      console.warn('CoinMarketCal: unexpected response shape');
-      return [];
-    }
-
-    console.log('CoinMarketCal events count:', items.length);
-
-    return items.map((item: any, idx: number) => {
-      const dateStr = item.date_event ? String(item.date_event).substring(0, 10) : '';
-      const coins = Array.isArray(item.coins) ? item.coins.map((c: any) => c.symbol || c.name).join(', ') : '';
-      const categories = Array.isArray(item.categories) ? item.categories.map((c: any) => c.name).join(', ') : '';
-
-      let impact: string | null = null;
-      if (item.percentage !== undefined) {
-        const pct = Number(item.percentage);
-        if (pct >= 70) impact = 'high';
-        else if (pct >= 40) impact = 'medium';
-        else impact = 'low';
-      }
-
-      return {
-        id: `cmc-${dateStr}-${idx}`,
-        event_date: dateStr,
-        event_time: null,
-        currency: coins || null,
-        event_name: String(item.title?.en || item.title || 'Crypto Event').substring(0, 200) + (categories ? ` [${categories}]` : ''),
-        impact,
-        actual: null,
-        forecast: null,
-        previous: null,
-        source: 'coinmarketcal' as const,
-      };
-    });
-  } catch (e) {
-    console.error('CoinMarketCal fetch error:', e);
-    return [];
-  }
-}
-
-// ── TradingView via Firecrawl ──────────────────────────────────
-async function fetchTradingView(): Promise<CalendarEvent[]> {
+async function scrapeWithFirecrawl(url: string, schema: any, prompt: string): Promise<any> {
   const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
   if (!apiKey) {
     console.error('FIRECRAWL_API_KEY not configured');
-    return [];
+    return null;
   }
 
   try {
-    console.log('Scraping TradingView economic calendar via Firecrawl...');
-
     const res = await fetch('https://api.firecrawl.dev/v1/scrape', {
       method: 'POST',
       headers: {
@@ -106,153 +76,176 @@ async function fetchTradingView(): Promise<CalendarEvent[]> {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        url: 'https://www.tradingview.com/economic-calendar/',
-        formats: ['markdown'],
-        onlyMainContent: true,
-        waitFor: 5000,
+        url,
+        formats: ['extract'],
+        extract: { schema, prompt },
+        waitFor: 6000,
       }),
     });
 
-    console.log('Firecrawl status:', res.status);
+    console.log(`Firecrawl scrape ${url}: status=${res.status}`);
     if (!res.ok) {
       const text = await res.text();
-      console.error('Firecrawl error:', text.substring(0, 300));
-      return [];
+      console.error('Firecrawl error:', text.substring(0, 500));
+      return null;
     }
 
     const json = await res.json();
-    const markdown = json.data?.markdown || json.markdown || '';
-    console.log('TradingView markdown length:', markdown.length);
-
-    if (!markdown) return [];
-
-    return parseTradingViewMarkdown(markdown);
+    return json.data?.extract || json.extract || null;
   } catch (e) {
-    console.error('TradingView fetch error:', e);
+    console.error('Firecrawl error:', e);
+    return null;
+  }
+}
+
+// ── TradingView ────────────────────────────────────────────────
+async function fetchTradingView(): Promise<CalendarEvent[]> {
+  const data = await scrapeWithFirecrawl(
+    'https://www.tradingview.com/economic-calendar/',
+    extractionSchema,
+    'Extract ALL economic calendar events visible on this page. For each event extract: the date (YYYY-MM-DD), time (HH:MM), currency code (USD/EUR/GBP/JPY/etc), event name, impact level (high/medium/low), actual value, forecast value, and previous value. Return them as an array of event objects.'
+  );
+
+  if (!data?.events || !Array.isArray(data.events)) {
+    console.log('TradingView: no events extracted');
     return [];
   }
+
+  console.log('TradingView extracted events:', data.events.length);
+
+  return data.events
+    .filter((ev: any) => ev.date && ev.name)
+    .map((ev: any, idx: number) => ({
+      id: `tv-${ev.date}-${idx}`,
+      event_date: String(ev.date).substring(0, 10),
+      event_time: ev.time || null,
+      currency: ev.currency || null,
+      event_name: String(ev.name).substring(0, 200),
+      impact: ['high', 'medium', 'low'].includes(ev.impact?.toLowerCase()) ? ev.impact.toLowerCase() : null,
+      actual: ev.actual || null,
+      forecast: ev.forecast || null,
+      previous: ev.previous || null,
+      source: 'tradingview' as const,
+    }));
 }
 
-function parseTradingViewMarkdown(md: string): CalendarEvent[] {
-  const events: CalendarEvent[] = [];
-  const lines = md.split('\n');
+// ── CoinMarketCal ──────────────────────────────────────────────
+async function fetchCoinMarketCal(): Promise<CalendarEvent[]> {
+  // First try the API with the key
+  const apiKey = Deno.env.get('COINMARKETCAL_API_KEY');
+  if (apiKey) {
+    try {
+      const today = new Date();
+      const dateFrom = new Date(today);
+      dateFrom.setDate(today.getDate() - 3);
+      const dateTo = new Date(today);
+      dateTo.setDate(today.getDate() + 14);
+      const fmt = (d: Date) => d.toISOString().substring(0, 10);
 
-  let currentDate = '';
-  const today = new Date();
-  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const url = `https://developers.coinmarketcal.com/v1/events?max=75&dateRangeStart=${fmt(dateFrom)}&dateRangeEnd=${fmt(dateTo)}`;
+      console.log('CoinMarketCal API fetch:', url);
 
-  // Try to find table rows or structured data
-  // TradingView calendar typically shows: Time | Currency | Impact | Event | Actual | Forecast | Previous
-  const timePattern = /^(\d{1,2}:\d{2})/;
-  const datePattern = /(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[,\s]+(\w+\s+\d{1,2}(?:,?\s*\d{4})?)/i;
-  const isoDatePattern = /(\d{4}-\d{2}-\d{2})/;
+      const res = await fetch(url, {
+        headers: { 'x-api-key': apiKey, 'Accept': 'application/json' },
+      });
 
-  // Also try table row pattern: | time | currency | event | ... |
-  const tableRowPattern = /\|?\s*(\d{1,2}:\d{2})?\s*\|?\s*([A-Z]{2,3})?\s*\|/;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
-    if (!line) continue;
-
-    // Check for date headers
-    const dateMatch = line.match(datePattern);
-    if (dateMatch) {
-      const parsed = new Date(dateMatch[0]);
-      if (!isNaN(parsed.getTime())) {
-        currentDate = `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}-${String(parsed.getDate()).padStart(2, '0')}`;
+      console.log('CoinMarketCal API status:', res.status);
+      if (res.ok) {
+        const json = await res.json();
+        const items = json.body || json.data || json;
+        if (Array.isArray(items) && items.length > 0) {
+          console.log('CoinMarketCal API events:', items.length);
+          return items.map((item: any, idx: number) => {
+            const dateStr = item.date_event ? String(item.date_event).substring(0, 10) : '';
+            const coins = Array.isArray(item.coins) ? item.coins.map((c: any) => c.symbol || c.name).join(', ') : '';
+            let impact: string | null = null;
+            if (item.percentage !== undefined) {
+              const pct = Number(item.percentage);
+              if (pct >= 70) impact = 'high';
+              else if (pct >= 40) impact = 'medium';
+              else impact = 'low';
+            }
+            return {
+              id: `cmc-${dateStr}-${idx}`,
+              event_date: dateStr,
+              event_time: null,
+              currency: coins || null,
+              event_name: String(item.title?.en || item.title || 'Crypto Event').substring(0, 200),
+              impact,
+              actual: null,
+              forecast: null,
+              previous: null,
+              source: 'coinmarketcal' as const,
+            };
+          });
+        }
+      } else {
+        const text = await res.text();
+        console.warn('CoinMarketCal API failed:', text.substring(0, 200));
       }
-      continue;
+    } catch (e) {
+      console.warn('CoinMarketCal API error:', e);
     }
-
-    const isoMatch = line.match(isoDatePattern);
-    if (isoMatch) {
-      currentDate = isoMatch[1];
-      continue;
-    }
-
-    // Parse event lines - look for currency codes (USD, EUR, etc.) as indicators
-    const currencies = ['USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'NZD', 'KRW', 'INR', 'BRL', 'MXN', 'ZAR', 'SGD', 'HKD', 'SEK', 'NOK', 'DKK', 'PLN', 'CZK', 'HUF', 'TRY', 'RUB', 'ALL'];
-    
-    let foundCurrency: string | null = null;
-    for (const cur of currencies) {
-      if (line.includes(cur)) {
-        foundCurrency = cur;
-        break;
-      }
-    }
-
-    if (!foundCurrency) continue;
-
-    // Extract time
-    const timeMatch = line.match(timePattern);
-    const eventTime = timeMatch ? timeMatch[1] : null;
-
-    // Determine impact from keywords or symbols
-    let impact: string | null = null;
-    const lineLower = line.toLowerCase();
-    if (lineLower.includes('high') || line.includes('🔴') || line.includes('***')) impact = 'high';
-    else if (lineLower.includes('medium') || lineLower.includes('moderate') || line.includes('🟡') || line.includes('**')) impact = 'medium';
-    else if (lineLower.includes('low') || line.includes('🟢')) impact = 'low';
-
-    // Clean event name - remove time, currency, and data values
-    let eventName = line
-      .replace(timePattern, '')
-      .replace(/\|/g, ' ')
-      .replace(/\*+/g, '')
-      .trim();
-
-    // Remove the currency from the event name
-    eventName = eventName.replace(new RegExp(`\\b${foundCurrency}\\b`), '').trim();
-    // Remove numeric values that look like data points
-    eventName = eventName.replace(/\s+[-]?\d+\.?\d*%?\s*/g, ' ').trim();
-    eventName = eventName.replace(/\s{2,}/g, ' ').trim();
-
-    if (eventName.length < 3) continue;
-
-    // Extract actual/forecast/previous from numbers in the line
-    const numbers = line.match(/[-]?\d+\.?\d*%?/g) || [];
-    const actual = numbers.length > 0 ? numbers[numbers.length - 3] || null : null;
-    const forecast = numbers.length > 1 ? numbers[numbers.length - 2] || null : null;
-    const previous = numbers.length > 2 ? numbers[numbers.length - 1] || null : null;
-
-    const useDate = currentDate || todayStr;
-
-    events.push({
-      id: `tv-${useDate}-${events.length}`,
-      event_date: useDate,
-      event_time: eventTime,
-      currency: foundCurrency,
-      event_name: eventName.substring(0, 200),
-      impact,
-      actual,
-      forecast,
-      previous,
-      source: 'tradingview' as const,
-    });
   }
 
-  console.log('TradingView parsed events:', events.length);
-  return events;
+  // Fallback: scrape the website via Firecrawl
+  console.log('CoinMarketCal: falling back to Firecrawl scraping');
+  const data = await scrapeWithFirecrawl(
+    'https://coinmarketcal.com/en/',
+    cryptoExtractionSchema,
+    'Extract ALL crypto events visible on this page. For each event extract: the date (YYYY-MM-DD format), coin symbols (BTC, ETH, etc), event title/description, category (listing, airdrop, fork, update, partnership, etc), and confidence percentage if shown. Return them as an array.'
+  );
+
+  if (!data?.events || !Array.isArray(data.events)) {
+    console.log('CoinMarketCal scrape: no events found');
+    return [];
+  }
+
+  console.log('CoinMarketCal scraped events:', data.events.length);
+
+  return data.events
+    .filter((ev: any) => ev.date && ev.title)
+    .map((ev: any, idx: number) => {
+      let impact: string | null = null;
+      if (ev.confidence) {
+        const pct = parseInt(ev.confidence);
+        if (!isNaN(pct)) {
+          if (pct >= 70) impact = 'high';
+          else if (pct >= 40) impact = 'medium';
+          else impact = 'low';
+        }
+      }
+      return {
+        id: `cmc-${ev.date}-${idx}`,
+        event_date: String(ev.date).substring(0, 10),
+        event_time: null,
+        currency: ev.coins || null,
+        event_name: `${String(ev.title).substring(0, 180)}${ev.categories ? ` [${ev.categories}]` : ''}`,
+        impact,
+        actual: null,
+        forecast: null,
+        previous: null,
+        source: 'coinmarketcal' as const,
+      };
+    });
 }
 
-// ── Main handler ───────────────────────────────────────────────
+// ── Main ───────────────────────────────────────────────────────
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Fetch both sources in parallel
-    const [cryptoEvents, macroEvents] = await Promise.all([
-      fetchCoinMarketCal(),
+    const [macroEvents, cryptoEvents] = await Promise.all([
       fetchTradingView(),
+      fetchCoinMarketCal(),
     ]);
 
-    console.log(`Total: CoinMarketCal=${cryptoEvents.length}, TradingView=${macroEvents.length}`);
+    console.log(`Total: TradingView=${macroEvents.length}, CoinMarketCal=${cryptoEvents.length}`);
 
     const allEvents = [...macroEvents, ...cryptoEvents];
 
-    // Sort by date + time
     allEvents.sort((a, b) => {
       const da = `${a.event_date} ${a.event_time || '00:00'}`;
       const db = `${b.event_date} ${b.event_time || '00:00'}`;
