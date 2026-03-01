@@ -39,7 +39,7 @@ const Navbar = () => {
     { label: 'Phân tích', id: 'analysis' },
     { label: 'Indicators', id: 'indicators' },
     { label: 'Lịch Kinh Tế', id: 'calendar' },
-    { label: 'Từ điển', id: 'dictionary' },
+    { label: 'Contact', id: 'contact' },
   ];
 
   return (
