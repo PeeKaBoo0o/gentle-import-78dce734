@@ -48,7 +48,7 @@ const Calendar = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
-  const [tab, setTab] = useState<DateTab>('today');
+  const [tab, setTab] = useState<DateTab>('week');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -89,6 +89,13 @@ const Calendar = () => {
     return acc;
   }, {});
 
+  const tabCounts: Record<DateTab, number> = {
+    yesterday: events.filter(ev => ev.event_date === yesterdayStr).length,
+    today: events.filter(ev => ev.event_date === todayStr).length,
+    tomorrow: events.filter(ev => ev.event_date === tomorrowStr).length,
+    week: events.length,
+  };
+
   const tabs: { key: DateTab; label: string }[] = [
     { key: 'yesterday', label: 'Hôm qua' },
     { key: 'today', label: 'Hôm nay' },
@@ -128,7 +135,7 @@ const Calendar = () => {
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${
+                className={`px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 ${
                   tab === t.key
                     ? 'text-white shadow-sm'
                     : 'text-gray-500 hover:text-gray-800'
@@ -136,6 +143,13 @@ const Calendar = () => {
                 style={tab === t.key ? { backgroundColor: 'hsl(210, 100%, 28%)' } : {}}
               >
                 {t.label}
+                {!loading && (
+                  <span className={`text-[10px] rounded-full px-1.5 py-0.5 font-mono ${
+                    tab === t.key ? 'bg-white/20' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    {tabCounts[t.key]}
+                  </span>
+                )}
               </button>
             ))}
           </motion.div>
