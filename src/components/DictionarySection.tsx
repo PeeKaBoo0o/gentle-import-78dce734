@@ -46,10 +46,10 @@ const DictionarySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: 'hsl(210, 20%, 95%)' }}>
             Liên hệ
           </h2>
-          <p className="text-muted-foreground mb-8">
+          <p className="mb-8" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Để lại email hoặc số điện thoại, chúng tôi sẽ liên hệ lại bạn.
           </p>
         </motion.div>
@@ -68,7 +68,8 @@ const DictionarySection = () => {
             onChange={(e) => setContactInfo(e.target.value)}
             placeholder="Email hoặc số điện thoại..."
             maxLength={255}
-            className="w-full rounded-xl bg-background/60 border border-border/50 px-5 py-3.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+            className="w-full rounded-xl bg-background/60 border border-border/50 px-5 py-3.5 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+            style={{ color: 'hsl(210, 20%, 93%)' }}
           />
           <button
             type="submit"
