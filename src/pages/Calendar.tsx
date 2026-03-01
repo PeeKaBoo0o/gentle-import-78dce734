@@ -31,10 +31,24 @@ const currencyFlag: Record<string, string> = {
   CAD: '🇨🇦', CHF: '🇨🇭', CNY: '🇨🇳', NZD: '🇳🇿', KRW: '🇰🇷',
 };
 
+const formatDate = (dateStr: string) => {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' });
+};
+
+type DateTab = 'yesterday' | 'today' | 'tomorrow' | 'week';
+
+const getDateStr = (offset: number) => {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 const Calendar = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string | null>(null);
+  const [tab, setTab] = useState<DateTab>('today');
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -50,9 +64,22 @@ const Calendar = () => {
     fetchEvents();
   }, []);
 
+  const yesterdayStr = getDateStr(-1);
+  const todayStr = getDateStr(0);
+  const tomorrowStr = getDateStr(1);
+
+  const tabFilteredEvents = (() => {
+    switch (tab) {
+      case 'yesterday': return events.filter(ev => ev.event_date === yesterdayStr);
+      case 'today': return events.filter(ev => ev.event_date === todayStr);
+      case 'tomorrow': return events.filter(ev => ev.event_date === tomorrowStr);
+      case 'week': return events;
+    }
+  })();
+
   const filteredEvents = filter
-    ? events.filter(ev => ev.impact === filter)
-    : events;
+    ? tabFilteredEvents.filter(ev => ev.impact === filter)
+    : tabFilteredEvents;
 
   // Group by date
   const grouped = filteredEvents.reduce<Record<string, CalendarEvent[]>>((acc, ev) => {
@@ -62,10 +89,12 @@ const Calendar = () => {
     return acc;
   }, {});
 
-  const formatDate = (dateStr: string) => {
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' });
-  };
+  const tabs: { key: DateTab; label: string }[] = [
+    { key: 'yesterday', label: 'Hôm qua' },
+    { key: 'today', label: 'Hôm nay' },
+    { key: 'tomorrow', label: 'Ngày mai' },
+    { key: 'week', label: 'Tuần này' },
+  ];
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'hsl(0, 0%, 100%)' }}>
@@ -88,7 +117,30 @@ const Calendar = () => {
             <p className="text-sm text-muted-foreground">Các sự kiện kinh tế quan trọng trong tuần</p>
           </motion.div>
 
-          {/* Filter */}
+          {/* Date Tabs */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="flex gap-1 mb-5 p-1 rounded-lg bg-gray-100 w-fit"
+          >
+            {tabs.map(t => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`px-4 py-2 rounded-md text-xs font-semibold transition-all ${
+                  tab === t.key
+                    ? 'text-white shadow-sm'
+                    : 'text-gray-500 hover:text-gray-800'
+                }`}
+                style={tab === t.key ? { backgroundColor: 'hsl(210, 100%, 28%)' } : {}}
+              >
+                {t.label}
+              </button>
+            ))}
+          </motion.div>
+
+          {/* Impact Filter */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -140,7 +192,6 @@ const Calendar = () => {
                     className="rounded-xl border border-white/10 overflow-hidden divide-y divide-white/5"
                     style={{ backgroundColor: 'hsl(215, 30%, 14%)' }}
                   >
-                    {/* Header */}
                     <div className="hidden sm:flex items-center gap-3 px-5 py-2 text-[10px] uppercase tracking-wider text-white/30 font-medium">
                       <span className="w-[6px]" />
                       <span className="min-w-[50px]">Giờ</span>
