@@ -60,7 +60,7 @@ const HeroSection = () => {
             to="/indicators"
             className="inline-flex items-center gap-2 border border-secondary/40 text-foreground font-medium px-8 py-3.5 rounded-full hover:bg-secondary/10 transition-colors text-sm"
           >
-            Khám phá công cụ
+            Bắt đầu
           </Link>
         </motion.div>
 
