@@ -57,8 +57,7 @@ const IndicatorsSection = () => {
       style={{ backgroundColor }}
     >
       <div className="max-w-5xl mx-auto">
-      <div className="flex gap-6 items-start">
-        <div className="relative flex-1" style={{ height: '220vh' }}>
+        <div className="relative" style={{ height: '220vh' }}>
           {projects.map((project, i) => (
             <div
               key={i}
@@ -115,43 +114,35 @@ const IndicatorsSection = () => {
               </motion.div>
             </div>
           ))}
-        </div>
 
-        {/* Button on the right side */}
-        <div className="hidden md:flex sticky top-[50vh] z-10 flex-shrink-0">
-          <motion.button
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            onClick={() => navigate('/indicators')}
-            className="px-6 py-3.5 rounded-full text-sm font-semibold shadow-lg transition-shadow hover:shadow-xl cursor-pointer whitespace-nowrap"
+          <div
+            className="sticky"
             style={{
-              backgroundColor: 'hsl(48, 100%, 50%)',
-              color: 'hsl(210, 80%, 8%)',
-              border: '2px solid hsl(48, 100%, 60%)',
-              writingMode: 'horizontal-tb',
+              top: `calc(50vh - 200px + ${projects.length * CARD_PEEK}px)`,
+              zIndex: projects.length + 1,
             }}
           >
-            Sử dụng công cụ →
-          </motion.button>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.6, delay: projects.length * 0.1 }}
+              className="flex justify-center py-6"
+            >
+              <button
+                onClick={() => navigate('/indicators')}
+                className="px-8 py-3.5 rounded-full text-base font-semibold shadow-lg transition-shadow hover:shadow-xl cursor-pointer"
+                style={{
+                  backgroundColor: 'hsl(48, 100%, 50%)',
+                  color: 'hsl(210, 80%, 8%)',
+                  border: '2px solid hsl(48, 100%, 60%)',
+                }}
+              >
+                Sử dụng công cụ →
+              </button>
+            </motion.div>
+          </div>
         </div>
-      </div>
-
-      {/* Mobile button */}
-      <div className="md:hidden flex justify-center mt-8">
-        <button
-          onClick={() => navigate('/indicators')}
-          className="px-8 py-3.5 rounded-full text-base font-semibold shadow-lg cursor-pointer"
-          style={{
-            backgroundColor: 'hsl(48, 100%, 50%)',
-            color: 'hsl(210, 80%, 8%)',
-            border: '2px solid hsl(48, 100%, 60%)',
-          }}
-        >
-          Sử dụng công cụ →
-        </button>
-      </div>
       </div>
     </motion.section>
   );
