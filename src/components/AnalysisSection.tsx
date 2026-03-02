@@ -74,35 +74,24 @@ const AnalysisSection = () => {
   ] : [];
 
   return (
-    <section id="analysis" className="section-padding" style={{ backgroundColor: 'hsl(210, 80%, 6%)' }}>
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 text-center"
-        >
-          <Link
-            to="/analysis"
-            className="inline-flex items-center gap-2 text-xl md:text-2xl font-semibold tracking-wide group/link"
-          >
-            <span className="text-accent">Phân Tích Crypto</span>
-            <ArrowRight size={20} className="text-accent group-hover/link:translate-x-1 transition-transform" />
-          </Link>
-          <p className="text-sm max-w-xl mx-auto mt-2" style={{ color: 'hsl(210, 20%, 65%)' }}>
+    <section id="analysis" className="section-padding">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
+            Phân Tích <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>Crypto</em>
+          </h2>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
             Dữ liệu thị trường realtime từ Binance · Cập nhật mỗi 30 giây
           </p>
         </motion.div>
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-5 h-5 animate-spin text-accent" />
-            <span className="ml-2 text-muted-foreground text-sm">Đang tải dữ liệu...</span>
+            <Loader2 className="w-5 h-5 animate-spin" style={{ color: 'hsl(210, 100%, 28%)' }} />
+            <span className="ml-2 text-sm" style={{ color: 'hsl(210, 20%, 50%)' }}>Đang tải dữ liệu...</span>
           </div>
         ) : !data ? (
-          <p className="text-muted-foreground text-center py-12 text-sm">Không thể tải dữ liệu thị trường</p>
+          <p className="text-center py-12 text-sm" style={{ color: 'hsl(210, 20%, 50%)' }}>Không thể tải dữ liệu thị trường</p>
         ) : (
           <>
             {/* Global Stats */}
@@ -110,7 +99,6 @@ const AnalysisSection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
               className="grid grid-cols-3 gap-3 mb-6"
             >
               {statCards.map((s, i) => {
@@ -118,14 +106,14 @@ const AnalysisSection = () => {
                 return (
                   <div
                     key={i}
-                    className="rounded-xl p-4 border border-border/40 text-center"
-                    style={{ background: 'hsl(210, 50%, 9%)' }}
+                    className="rounded-xl p-4 text-center"
+                    style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 90%)' }}
                   >
                     <div className="flex items-center justify-center gap-1.5 mb-1.5">
-                      <Icon className="w-3.5 h-3.5 text-accent/70" />
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.label}</span>
+                      <Icon className="w-3.5 h-3.5" style={{ color: 'hsl(210, 100%, 28%)' }} />
+                      <span className="text-[10px] uppercase tracking-wider" style={{ color: 'hsl(210, 20%, 50%)' }}>{s.label}</span>
                     </div>
-                    <span className="text-lg md:text-xl font-bold" style={{ color: 'hsl(210, 20%, 93%)' }}>{s.value}</span>
+                    <span className="text-lg md:text-xl font-bold" style={{ color: 'hsl(210, 80%, 8%)' }}>{s.value}</span>
                   </div>
                 );
               })}
@@ -136,12 +124,11 @@ const AnalysisSection = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="rounded-2xl border border-border/40 overflow-hidden"
-              style={{ background: 'hsl(210, 50%, 9%)' }}
+              transition={{ delay: 0.1 }}
+              className="rounded-2xl overflow-hidden"
+              style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 90%)' }}
             >
-              {/* Table header */}
-              <div className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-2.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/30">
+              <div className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-2.5 text-[10px] uppercase tracking-wider" style={{ color: 'hsl(210, 20%, 50%)', borderBottom: '1px solid hsl(210, 20%, 90%)' }}>
                 <span>Coin</span>
                 <span className="text-right min-w-[80px]">Giá</span>
                 <span className="text-right min-w-[60px]">24h %</span>
@@ -149,98 +136,98 @@ const AnalysisSection = () => {
                 <span className="text-right min-w-[70px]">H/L</span>
               </div>
 
-              {/* Rows */}
-              <div className="divide-y divide-border/20">
+              <div>
                 {data.tickers.map((t, i) => {
                   const isUp = t.priceChange >= 0;
                   return (
                     <div
                       key={t.symbol}
-                      className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-3 hover:bg-white/[0.03] transition-colors text-sm"
+                      className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-3 hover:bg-white/60 transition-colors text-sm"
+                      style={{ borderBottom: '1px solid hsl(210, 20%, 92%)' }}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-[10px] font-bold text-accent">
+                        <span className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold" style={{ background: 'hsl(210, 30%, 90%)', color: 'hsl(210, 100%, 28%)' }}>
                           {i + 1}
                         </span>
-                        <span className="font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>{t.symbol}</span>
-                        <span className="text-[10px] text-muted-foreground">/USDT</span>
+                        <span className="font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>{t.symbol}</span>
+                        <span className="text-[10px]" style={{ color: 'hsl(210, 20%, 50%)' }}>/USDT</span>
                       </div>
-                      <span className="text-right font-mono font-medium min-w-[80px]" style={{ color: 'hsl(210, 20%, 93%)' }}>
+                      <span className="text-right font-mono font-medium min-w-[80px]" style={{ color: 'hsl(210, 80%, 8%)' }}>
                         {formatPrice(t.price)}
                       </span>
-                      <span className={`text-right font-mono text-xs min-w-[60px] flex items-center justify-end gap-0.5 ${isUp ? 'text-emerald-400' : 'text-red-400'}`}>
+                      <span className={`text-right font-mono text-xs min-w-[60px] flex items-center justify-end gap-0.5 ${isUp ? 'text-emerald-600' : 'text-red-500'}`}>
                         {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                         {isUp ? '+' : ''}{t.priceChange.toFixed(2)}%
                       </span>
-                      <span className="hidden md:block text-right text-xs font-mono text-muted-foreground min-w-[90px]">
+                      <span className="hidden md:block text-right text-xs font-mono min-w-[90px]" style={{ color: 'hsl(210, 20%, 50%)' }}>
                         {formatCompact(t.volume)}
                       </span>
                       <span className="text-right text-[10px] font-mono min-w-[70px]">
-                        <span className="text-emerald-400/60">{formatPrice(t.high)}</span>
-                        <span className="text-muted-foreground/40 mx-0.5">/</span>
-                        <span className="text-red-400/60">{formatPrice(t.low)}</span>
+                        <span className="text-emerald-600">{formatPrice(t.high)}</span>
+                        <span className="mx-0.5" style={{ color: 'hsl(210, 20%, 70%)' }}>/</span>
+                        <span className="text-red-500">{formatPrice(t.low)}</span>
                       </span>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Footer with timestamp */}
-              <div className="px-4 py-2 border-t border-border/20 flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground/50 font-mono">
+              <div className="px-4 py-2 flex items-center justify-between" style={{ borderTop: '1px solid hsl(210, 20%, 90%)' }}>
+                <span className="text-[10px] font-mono" style={{ color: 'hsl(210, 20%, 60%)' }}>
                   Nguồn: Binance · CoinGecko
                 </span>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[10px] text-muted-foreground/50">LIVE</span>
+                  <span className="text-[10px]" style={{ color: 'hsl(210, 20%, 60%)' }}>LIVE</span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Derivatives from CoinGecko */}
+            {/* Derivatives */}
             {data.derivatives && data.derivatives.length > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mt-4 rounded-2xl border border-border/40 overflow-hidden"
-                style={{ background: 'hsl(210, 50%, 9%)' }}
+                transition={{ delay: 0.2 }}
+                className="mt-4 rounded-2xl overflow-hidden"
+                style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 90%)' }}
               >
-                <div className="px-4 py-3 border-b border-border/30 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-accent/70" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Derivatives Data</span>
+                <div className="px-4 py-3 flex items-center gap-2" style={{ borderBottom: '1px solid hsl(210, 20%, 90%)' }}>
+                  <Activity className="w-4 h-4" style={{ color: 'hsl(210, 100%, 28%)' }} />
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'hsl(210, 20%, 50%)' }}>Derivatives Data</span>
                 </div>
-                <div className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-2 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/30">
+                <div className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-2 text-[10px] uppercase tracking-wider" style={{ color: 'hsl(210, 20%, 50%)', borderBottom: '1px solid hsl(210, 20%, 90%)' }}>
                   <span>Coin</span>
                   <span className="text-right min-w-[80px]">Funding Rate</span>
                   <span className="text-right min-w-[90px]">Open Interest</span>
                   <span className="text-right min-w-[80px]">Volume 24h</span>
                 </div>
-                <div className="divide-y divide-border/20">
+                <div>
                   {data.derivatives.map((d) => {
                     const frPositive = d.fundingRate >= 0;
                     return (
                       <div
                         key={d.symbol}
-                        className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-3 hover:bg-white/[0.03] transition-colors text-sm"
+                        className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-3 hover:bg-white/60 transition-colors text-sm"
+                        style={{ borderBottom: '1px solid hsl(210, 20%, 92%)' }}
                       >
-                        <span className="font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>{d.symbol}</span>
-                        <span className={`text-right font-mono text-xs min-w-[80px] ${frPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <span className="font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>{d.symbol}</span>
+                        <span className={`text-right font-mono text-xs min-w-[80px] ${frPositive ? 'text-emerald-600' : 'text-red-500'}`}>
                           {frPositive ? '+' : ''}{(d.fundingRate * 100).toFixed(4)}%
                         </span>
-                        <span className="text-right text-xs font-mono text-muted-foreground min-w-[90px]">
+                        <span className="text-right text-xs font-mono min-w-[90px]" style={{ color: 'hsl(210, 20%, 50%)' }}>
                           {formatCompact(d.openInterest)}
                         </span>
-                        <span className="text-right text-xs font-mono text-muted-foreground min-w-[80px]">
+                        <span className="text-right text-xs font-mono min-w-[80px]" style={{ color: 'hsl(210, 20%, 50%)' }}>
                           {formatCompact(d.volume24h)}
                         </span>
                       </div>
                     );
                   })}
                 </div>
-                <div className="px-4 py-2 border-t border-border/20">
-                  <span className="text-[10px] text-muted-foreground/50 font-mono">Nguồn: CoinGecko Derivatives</span>
+                <div className="px-4 py-2" style={{ borderTop: '1px solid hsl(210, 20%, 90%)' }}>
+                  <span className="text-[10px] font-mono" style={{ color: 'hsl(210, 20%, 60%)' }}>Nguồn: CoinGecko Derivatives</span>
                 </div>
               </motion.div>
             )}
