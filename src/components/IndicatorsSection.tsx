@@ -39,10 +39,10 @@ const IndicatorsSection = () => {
     <section id="indicators" className="section-padding">
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
-            Chỉ báo <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>kỹ thuật</em>
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>
+            Chỉ báo <em className="font-display italic text-accent">kỹ thuật</em>
           </h2>
-          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Bộ công cụ chỉ báo kỹ thuật chuyên sâu dành cho trader chuyên nghiệp.
           </p>
         </motion.div>
@@ -56,24 +56,24 @@ const IndicatorsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="rounded-2xl overflow-hidden group"
-              style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 88%)' }}
+              style={{ background: 'hsl(210, 50%, 9%)', border: '1px solid hsl(210, 30%, 18%)' }}
             >
               <div className="relative h-48 overflow-hidden">
                 <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               </div>
               <div className="p-5 space-y-3">
                 <span className="inline-flex items-center gap-2 text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full"
-                  style={{ color: 'hsl(210, 100%, 28%)', background: 'hsl(210, 30%, 92%)' }}
+                  style={{ color: 'hsl(210, 20%, 65%)', background: 'hsl(210, 50%, 14%)' }}
                 >
                   {project.label}
                 </span>
-                <h3 className="text-lg font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>{project.title}</h3>
-                <p className="text-xs font-medium" style={{ color: 'hsl(210, 100%, 28%)' }}>{project.subtitle}</p>
-                <p className="text-xs leading-relaxed" style={{ color: 'hsl(210, 15%, 40%)' }}>{project.description}</p>
+                <h3 className="text-lg font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>{project.title}</h3>
+                <p className="text-xs font-medium text-accent">{project.subtitle}</p>
+                <p className="text-xs leading-relaxed" style={{ color: 'hsl(210, 20%, 65%)' }}>{project.description}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {project.tech.split(' · ').map((item, idx) => (
                     <span key={idx} className="text-[10px] px-2.5 py-0.5 rounded-full"
-                      style={{ color: 'hsl(210, 20%, 40%)', background: 'hsl(210, 20%, 92%)' }}
+                      style={{ color: 'hsl(210, 20%, 65%)', background: 'hsl(210, 50%, 14%)' }}
                     >
                       {item}
                     </span>
