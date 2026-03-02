@@ -13,8 +13,17 @@ interface Ticker {
   low: number;
 }
 
+interface Derivative {
+  symbol: string;
+  fundingRate: number;
+  openInterest: number;
+  volume24h: number;
+  spread: number;
+}
+
 interface MarketData {
   tickers: Ticker[];
+  derivatives: Derivative[];
   btcDominance: number;
   totalMarketCap: number;
   totalVolume24h: number;
@@ -188,6 +197,53 @@ const AnalysisSection = () => {
               </div>
             </motion.div>
 
+            {/* Derivatives from CoinGecko */}
+            {data.derivatives && data.derivatives.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mt-4 rounded-2xl border border-border/40 overflow-hidden"
+                style={{ background: 'hsl(210, 50%, 9%)' }}
+              >
+                <div className="px-4 py-3 border-b border-border/30 flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-accent/70" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Derivatives Data</span>
+                </div>
+                <div className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-2 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/30">
+                  <span>Coin</span>
+                  <span className="text-right min-w-[80px]">Funding Rate</span>
+                  <span className="text-right min-w-[90px]">Open Interest</span>
+                  <span className="text-right min-w-[80px]">Volume 24h</span>
+                </div>
+                <div className="divide-y divide-border/20">
+                  {data.derivatives.map((d) => {
+                    const frPositive = d.fundingRate >= 0;
+                    return (
+                      <div
+                        key={d.symbol}
+                        className="grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-3 hover:bg-white/[0.03] transition-colors text-sm"
+                      >
+                        <span className="font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>{d.symbol}</span>
+                        <span className={`text-right font-mono text-xs min-w-[80px] ${frPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {frPositive ? '+' : ''}{(d.fundingRate * 100).toFixed(4)}%
+                        </span>
+                        <span className="text-right text-xs font-mono text-muted-foreground min-w-[90px]">
+                          {formatCompact(d.openInterest)}
+                        </span>
+                        <span className="text-right text-xs font-mono text-muted-foreground min-w-[80px]">
+                          {formatCompact(d.volume24h)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="px-4 py-2 border-t border-border/20">
+                  <span className="text-[10px] text-muted-foreground/50 font-mono">Nguồn: CoinGecko Derivatives</span>
+                </div>
+              </motion.div>
+            )}
           </>
         )}
       </div>
