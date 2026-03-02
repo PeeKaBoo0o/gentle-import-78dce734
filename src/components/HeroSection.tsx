@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BarChart3, Users, Clock } from 'lucide-react';
+import { BarChart3, Activity, Clock } from 'lucide-react';
 import WireframeMesh from './WireframeMesh';
 
-const stats = [
-  { value: '24/7', label: 'Cập nhật liên tục', icon: Clock },
-  { value: '100+', label: 'Kịch bản mỗi tháng', icon: BarChart3 },
-  { value: '5K+', label: 'Traders theo dõi', icon: Users },
+const features = [
+  { label: 'Kịch bản giao dịch', icon: BarChart3 },
+  { label: 'Phân tích realtime', icon: Activity },
+  { label: 'Lịch kinh tế', icon: Clock },
 ];
 
 const HeroSection = () => {
@@ -39,9 +39,9 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-foreground text-center mb-6"
         >
-          Nâng cấp giao dịch
+          Kịch bản · Phân tích · Lịch kinh tế
           <br />
-          <span className="text-accent">crypto</span> của bạn.
+          <span className="text-accent">Tất cả trong một.</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -51,7 +51,7 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-2xl mx-auto text-center mb-12"
         >
-          Kịch bản, phân tích và công cụ hỗ trợ giao dịch — hoàn toàn miễn phí, cập nhật mỗi ngày bởi cộng đồng traders Việt Nam.
+          Công cụ hỗ trợ giao dịch crypto toàn diện — kịch bản hàng ngày, phân tích thị trường realtime và lịch kinh tế, hoàn toàn miễn phí.
         </motion.p>
 
         {/* CTA */}
@@ -81,20 +81,23 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8 }}
-          className="grid grid-cols-3 gap-4 max-w-lg mx-auto mb-20"
+          className="flex flex-wrap justify-center gap-3 max-w-lg mx-auto mb-20"
         >
-          {stats.map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9 + i * 0.1 }}
-              className="text-center"
-            >
-              <div className="text-2xl md:text-3xl font-bold text-foreground">{s.value}</div>
-              <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
-            </motion.div>
-          ))}
+          {features.map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9 + i * 0.1 }}
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card/50 backdrop-blur-sm px-4 py-2"
+              >
+                <Icon className="w-3.5 h-3.5 text-primary" />
+                <span className="text-xs font-medium text-foreground">{f.label}</span>
+              </motion.div>
+            );
+          })}
         </motion.div>
 
         {/* Disclaimer */}
