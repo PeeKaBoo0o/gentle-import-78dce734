@@ -188,23 +188,6 @@ const AnalysisSection = () => {
               </div>
             </motion.div>
 
-            {/* Derivatives placeholder */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-4 rounded-xl border border-border/30 p-6 text-center"
-              style={{ background: 'hsl(210, 50%, 9%)' }}
-            >
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Activity className="w-4 h-4 text-accent/60" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Derivatives Data</span>
-              </div>
-              <p className="text-[11px] text-muted-foreground/60">
-                Funding Rate · Open Interest · Liquidation — sắp ra mắt (Coinglass)
-              </p>
-            </motion.div>
           </>
         )}
       </div>
