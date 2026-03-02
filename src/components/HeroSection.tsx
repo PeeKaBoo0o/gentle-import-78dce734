@@ -39,9 +39,9 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-foreground text-center mb-6"
         >
-          Kịch bản · Phân tích · Lịch kinh tế
+          Giao dịch thông minh hơn
           <br />
-          <span className="text-accent">Tất cả trong một.</span>
+          <span className="text-accent">mỗi ngày.</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -51,7 +51,7 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
           className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-2xl mx-auto text-center mb-12"
         >
-          Công cụ hỗ trợ giao dịch crypto toàn diện — kịch bản hàng ngày, phân tích thị trường realtime và lịch kinh tế, hoàn toàn miễn phí.
+          Kịch bản giao dịch, phân tích thị trường và lịch kinh tế — mọi thứ bạn cần để ra quyết định tốt hơn, hoàn toàn miễn phí.
         </motion.p>
 
         {/* CTA */}
