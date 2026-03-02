@@ -105,11 +105,11 @@ const NewsSection = () => {
       {loading ? (
         <div className="max-w-7xl mx-auto flex gap-6 overflow-hidden">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="animate-pulse rounded-2xl p-4 min-w-[320px]" style={{ background: 'hsl(210, 30%, 95%)' }}>
-              <div className="rounded-xl h-44 mb-3" style={{ background: 'hsl(210, 20%, 88%)' }} />
-              <div className="rounded h-4 w-3/4 mb-2" style={{ background: 'hsl(210, 20%, 88%)' }} />
-              <div className="rounded h-3 w-full mb-1" style={{ background: 'hsl(210, 20%, 88%)' }} />
-              <div className="rounded h-3 w-2/3" style={{ background: 'hsl(210, 20%, 88%)' }} />
+            <div key={i} className="animate-pulse rounded-2xl p-4 min-w-[320px]" style={{ background: 'hsl(210, 50%, 14%)' }}>
+              <div className="rounded-xl h-44 mb-3" style={{ background: 'hsl(210, 40%, 20%)' }} />
+              <div className="rounded h-4 w-3/4 mb-2" style={{ background: 'hsl(210, 40%, 20%)' }} />
+              <div className="rounded h-3 w-full mb-1" style={{ background: 'hsl(210, 40%, 20%)' }} />
+              <div className="rounded h-3 w-2/3" style={{ background: 'hsl(210, 40%, 20%)' }} />
             </div>
           ))}
         </div>

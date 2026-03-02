@@ -29,10 +29,10 @@ const AboutUsSection = () => {
           viewport={{ once: true }}
           className="text-center mb-8"
         >
-          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
-            Hỗ trợ trader Việt <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>ra quyết định tốt hơn.</em>
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>
+            Hỗ trợ trader Việt <em className="font-display italic text-accent">ra quyết định tốt hơn.</em>
           </h2>
-          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 65%)' }}>
             TBN cung cấp tín hiệu crypto, phân tích chuyên sâu và công cụ giao dịch miễn phí.
           </p>
         </motion.div>
@@ -46,13 +46,13 @@ const AboutUsSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
               className="rounded-2xl p-6 group"
-              style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 88%)' }}
+              style={{ background: 'hsl(210, 50%, 9%)', border: '1px solid hsl(210, 30%, 18%)' }}
             >
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: 'hsl(210, 30%, 90%)' }}>
-                <v.icon size={20} style={{ color: 'hsl(210, 100%, 28%)' }} />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: 'hsl(210, 50%, 14%)' }}>
+                <v.icon size={20} className="text-accent" />
               </div>
-              <h3 className="text-lg font-semibold mb-2" style={{ color: 'hsl(210, 80%, 8%)' }}>{v.title}</h3>
-              <p className="text-sm leading-relaxed" style={{ color: 'hsl(210, 15%, 40%)' }}>{v.desc}</p>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'hsl(210, 20%, 93%)' }}>{v.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'hsl(210, 20%, 65%)' }}>{v.desc}</p>
             </motion.div>
           ))}
         </div>
