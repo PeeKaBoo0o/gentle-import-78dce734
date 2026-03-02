@@ -19,19 +19,6 @@ const HeroSection = () => {
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/8 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-12">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="flex justify-center mb-8"
-        >
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-emerald-400 tracking-wide uppercase">Live · Đang hoạt động</span>
-          </div>
-        </motion.div>
-
         {/* Main headline */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
