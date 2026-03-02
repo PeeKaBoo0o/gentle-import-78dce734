@@ -25,23 +25,28 @@ const Navbar = () => {
     setMobileOpen(false);
   };
 
-  const handleNavClick = (link: { label: string; id: string; route?: string }) => {
-    if (link.route) {
+  const links = [
+    { label: 'Indicators', id: 'indicators', route: '/indicators' },
+    { label: 'Lịch Kinh Tế', id: 'calendar', route: '/calendar' },
+    { label: 'Tin Tức', id: 'news', route: '/news' },
+    { label: 'Phân tích', id: 'analysis', route: '/analysis' },
+    { label: 'Kịch bản', id: 'scenarios', route: '/scenarios' },
+    { label: 'Contact', id: 'contact' },
+  ];
+
+  const handleNavClick = (link: typeof links[number]) => {
+    if (location.pathname === '/') {
+      scrollTo(link.id);
+    } else if (link.route) {
       navigate(link.route);
     } else {
-      scrollTo(link.id);
+      navigate('/');
+      setTimeout(() => {
+        document.getElementById(link.id)?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
     }
     setMobileOpen(false);
   };
-
-  const links = [
-    { label: 'Indicators', id: 'indicators' },
-    { label: 'Lịch Kinh Tế', id: 'calendar' },
-    { label: 'Tin Tức', id: 'news' },
-    { label: 'Phân tích', id: 'analysis' },
-    { label: 'Kịch bản', id: 'scenarios' },
-    { label: 'Contact', id: 'contact' },
-  ];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 bg-background/60 backdrop-blur-xl border-b border-border/30 transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
