@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import tbnClean from '@/assets/tbn-clean.png';
 
@@ -8,6 +8,7 @@ const Navbar = () => {
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +46,13 @@ const Navbar = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 px-6 md:px-12 bg-background/60 backdrop-blur-xl border-b border-border/30 transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <div className="flex items-center cursor-pointer -my-3" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div className="flex items-center cursor-pointer -my-3" onClick={() => {
+          if (location.pathname === '/') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            navigate('/');
+          }
+        }}>
           <img src={tbnClean} alt="TBN" className="h-16 w-auto" style={{ filter: 'brightness(1.5) sepia(0.3) saturate(1.2)' }} />
         </div>
 
