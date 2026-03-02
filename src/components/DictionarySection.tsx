@@ -47,7 +47,7 @@ const DictionarySection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl md:text-4xl font-semibold mb-3" style={{ color: 'hsl(210, 20%, 95%)' }}>
-            Liên <em className="font-display italic text-accent">hệ</em>
+            Liên hệ
           </h2>
           <p className="text-sm mb-8" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Để lại email hoặc số điện thoại, chúng tôi sẽ liên hệ lại bạn.
