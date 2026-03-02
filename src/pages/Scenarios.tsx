@@ -227,7 +227,9 @@ const Scenarios = () => {
     <div className="min-h-screen bg-background">
       <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/30">
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-4 flex items-center justify-between">
-          <div />
+          <button onClick={() => navigate('/')} className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm">
+            <ArrowLeft className="w-4 h-4" /> Trang chủ
+          </button>
           <h1 className="text-lg font-semibold text-foreground">Kịch bản hôm nay</h1>
           <div className="flex items-center gap-2">
             {generatedAt && (
