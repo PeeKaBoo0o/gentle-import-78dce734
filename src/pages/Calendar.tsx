@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Loader2, Calendar as CalendarIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Loader2, Calendar as CalendarIcon, Filter } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
@@ -52,7 +51,7 @@ const formatDateHeading = (dateStr: string) => {
 type TabKey = 'all' | 'today' | 'tomorrow' | 'yesterday';
 
 const getEmptyMessage = (tab: TabKey) => {
-  const dayOfWeek = new Date().getDay(); // 0=Sun, 6=Sat
+  const dayOfWeek = new Date().getDay();
   if (tab === 'today' && (dayOfWeek === 0 || dayOfWeek === 6)) {
     return 'Hôm nay là cuối tuần — thị trường không có sự kiện kinh tế.';
   }
@@ -96,8 +95,7 @@ const EventTable = ({ events, emptyMessage }: { events: CalendarEvent[]; emptyMe
             {formatDateHeading(date)}
           </h2>
           <div className="rounded-xl border border-border overflow-hidden divide-y divide-border bg-card">
-            {/* Header */}
-            <div className="hidden sm:flex items-center gap-3 px-5 py-2 text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
+            <div className="hidden sm:flex items-center gap-3 px-5 py-2 text-[10px] uppercase tracking-wider text-muted-foreground font-medium bg-muted/30">
               <span className="w-[6px]" />
               <span className="min-w-[50px]">Giờ</span>
               <span className="min-w-[55px]">Tiền tệ</span>
@@ -142,10 +140,14 @@ const EventTable = ({ events, emptyMessage }: { events: CalendarEvent[]; emptyMe
 const Calendar = () => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<TabKey>('all');
+  const [tab, setTab] = useState<TabKey>('today');
   const [filter, setFilter] = useState<string | null>(null);
   const [sourceFilter, setSourceFilter] = useState<string | null>(null);
   const [pickerDate, setPickerDate] = useState<Date | undefined>(undefined);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -192,10 +194,10 @@ const Calendar = () => {
   }, [events, tab, filter, sourceFilter, pickerDate, todayStr, yesterdayStr, tomorrowStr]);
 
   const tabs: { key: TabKey; label: string }[] = [
-    { key: 'all', label: 'Tất cả' },
-    { key: 'yesterday', label: 'Hôm qua' },
     { key: 'today', label: 'Hôm nay' },
+    { key: 'yesterday', label: 'Hôm qua' },
     { key: 'tomorrow', label: 'Ngày mai' },
+    { key: 'all', label: 'Tất cả' },
   ];
 
   const tabCounts = useMemo(() => ({
@@ -205,87 +207,79 @@ const Calendar = () => {
     tomorrow: events.filter(ev => ev.event_date === tomorrowStr).length,
   }), [events, todayStr, yesterdayStr, tomorrowStr]);
 
+  const hasActiveFilters = filter !== null || sourceFilter !== null;
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <CalendarIcon size={28} className="text-primary" />
-              <h1 className="text-2xl md:text-3xl font-bold text-primary">Lịch Kinh Tế</h1>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">📅 Lịch Kinh Tế</h1>
+                <p className="text-sm text-muted-foreground mt-1">Các sự kiện kinh tế quan trọng trong tuần</p>
+              </div>
+              {!loading && (
+                <div className="text-right hidden sm:block">
+                  <p className="text-2xl font-bold text-foreground">{filteredEvents.length}</p>
+                  <p className="text-xs text-muted-foreground">sự kiện</p>
+                </div>
+              )}
             </div>
-            <p className="text-sm text-muted-foreground">Các sự kiện kinh tế quan trọng trong tuần</p>
           </motion.div>
 
           {/* Tabs */}
-          <div className="flex gap-1 mb-5 p-1 rounded-lg bg-muted w-fit overflow-x-auto">
-            {tabs.map(t => (
-              <button
-                key={t.key}
-                onClick={() => { setTab(t.key); if (t.key !== 'all') setPickerDate(undefined); }}
-                className={cn(
-                  'px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap',
-                  tab === t.key
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                {t.label}
-                {!loading && (
-                  <span className={cn(
-                    'text-[10px] rounded-full px-1.5 py-0.5 font-mono',
-                    tab === t.key ? 'bg-primary-foreground/20' : 'bg-background text-muted-foreground'
-                  )}>
-                    {tabCounts[t.key]}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Date picker for "Tất cả" tab */}
-          {tab === 'all' && !loading && (
-            <div className="mb-5">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" className={cn('justify-start text-left font-normal', !pickerDate && 'text-muted-foreground')}>
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {pickerDate ? format(pickerDate, 'dd/MM/yyyy') : 'Chọn ngày để xem'}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <CalendarPicker
-                    mode="single"
-                    selected={pickerDate}
-                    onSelect={setPickerDate}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                  />
-                </PopoverContent>
-              </Popover>
-              {pickerDate && (
-                <button onClick={() => setPickerDate(undefined)} className="ml-3 text-xs text-primary hover:underline">
-                  Xem tất cả ngày
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
+            <div className="flex gap-1 p-1 rounded-lg bg-muted w-fit overflow-x-auto">
+              {tabs.map(t => (
+                <button
+                  key={t.key}
+                  onClick={() => { setTab(t.key); if (t.key !== 'all') setPickerDate(undefined); }}
+                  className={cn(
+                    'px-4 py-2 rounded-md text-xs font-semibold transition-all flex items-center gap-1.5 whitespace-nowrap',
+                    tab === t.key
+                      ? 'bg-primary text-primary-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  )}
+                >
+                  {t.label}
+                  {!loading && (
+                    <span className={cn(
+                      'text-[10px] rounded-full px-1.5 py-0.5 font-mono',
+                      tab === t.key ? 'bg-primary-foreground/20' : 'bg-background text-muted-foreground'
+                    )}>
+                      {tabCounts[t.key]}
+                    </span>
+                  )}
                 </button>
-              )}
+              ))}
             </div>
-          )}
+          </motion.div>
 
-          {/* Impact filter */}
-          <div className="flex gap-2 mb-6 flex-wrap">
+          {/* Filters toolbar */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="flex flex-wrap items-center gap-2 mb-6 p-3 rounded-xl border border-border bg-card"
+          >
+            <Filter size={14} className="text-muted-foreground shrink-0" />
+            <span className="text-xs text-muted-foreground font-medium mr-1">Lọc:</span>
+
+            {/* Impact filters */}
             {[
               { key: null, label: 'Tất cả' },
               { key: 'high', label: '🔴 Cao' },
-              { key: 'medium', label: '🟡 Trung bình' },
+              { key: 'medium', label: '🟡 TB' },
               { key: 'low', label: '🟢 Thấp' },
             ].map(f => (
               <button
                 key={f.key || 'all'}
                 onClick={() => setFilter(f.key)}
                 className={cn(
-                  'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                  'px-2.5 py-1 rounded-md text-[11px] font-medium transition-all border',
                   filter === f.key
                     ? 'bg-primary text-primary-foreground border-transparent'
                     : 'border-border text-muted-foreground hover:border-foreground/30'
@@ -294,10 +288,10 @@ const Calendar = () => {
                 {f.label}
               </button>
             ))}
-          </div>
 
-          {/* Source filter */}
-          <div className="flex gap-2 mb-6 flex-wrap">
+            <span className="w-px h-5 bg-border mx-1 hidden sm:block" />
+
+            {/* Source filters */}
             {[
               { key: null, label: 'Tất cả nguồn' },
               { key: 'tradingview', label: '📊 Vĩ mô' },
@@ -307,7 +301,7 @@ const Calendar = () => {
                 key={f.key || 'all-source'}
                 onClick={() => setSourceFilter(f.key)}
                 className={cn(
-                  'px-3 py-1.5 rounded-full text-xs font-medium transition-all border',
+                  'px-2.5 py-1 rounded-md text-[11px] font-medium transition-all border',
                   sourceFilter === f.key
                     ? 'bg-primary text-primary-foreground border-transparent'
                     : 'border-border text-muted-foreground hover:border-foreground/30'
@@ -316,7 +310,46 @@ const Calendar = () => {
                 {f.label}
               </button>
             ))}
-          </div>
+
+            {/* Date picker in "all" tab */}
+            {tab === 'all' && !loading && (
+              <>
+                <span className="w-px h-5 bg-border mx-1 hidden sm:block" />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" size="sm" className={cn('h-7 text-[11px] font-medium', !pickerDate && 'text-muted-foreground')}>
+                      <CalendarIcon className="mr-1.5 h-3 w-3" />
+                      {pickerDate ? format(pickerDate, 'dd/MM/yyyy') : 'Chọn ngày'}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <CalendarPicker
+                      mode="single"
+                      selected={pickerDate}
+                      onSelect={setPickerDate}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {pickerDate && (
+                  <button onClick={() => setPickerDate(undefined)} className="text-[11px] text-primary hover:underline">
+                    Xóa
+                  </button>
+                )}
+              </>
+            )}
+
+            {/* Clear all filters */}
+            {hasActiveFilters && (
+              <button
+                onClick={() => { setFilter(null); setSourceFilter(null); }}
+                className="ml-auto text-[11px] text-destructive hover:underline"
+              >
+                Xóa bộ lọc
+              </button>
+            )}
+          </motion.div>
 
           {/* Content */}
           {loading ? (
