@@ -1,45 +1,68 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, TrendingUp, BarChart3, Shield, Target, Zap, BookOpen } from 'lucide-react';
+import { ArrowRight, TrendingUp, TrendingDown, BarChart3, Activity, DollarSign, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
-const featured = {
-  icon: TrendingUp,
-  tag: 'NỔI BẬT',
-  title: 'Phân tích xu hướng thị trường',
-  description:
-    'Đánh giá xu hướng tổng quan của BTC, ETH và các altcoin chính dựa trên cấu trúc thị trường, dòng tiền và tâm lý nhà đầu tư. Kết hợp phân tích on-chain để xác định giai đoạn tích lũy hay phân phối.',
+interface Ticker {
+  symbol: string;
+  price: number;
+  priceChange: number;
+  volume: number;
+  high: number;
+  low: number;
+}
+
+interface MarketData {
+  tickers: Ticker[];
+  btcDominance: number;
+  totalMarketCap: number;
+  totalVolume24h: number;
+  updatedAt: string;
+}
+
+const formatCompact = (n: number) => {
+  if (n >= 1e12) return `$${(n / 1e12).toFixed(2)}T`;
+  if (n >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `$${(n / 1e6).toFixed(1)}M`;
+  return `$${n.toLocaleString('en-US')}`;
 };
 
-const topics = [
-  {
-    icon: BarChart3,
-    title: 'Phân tích kỹ thuật chuyên sâu',
-    description: 'Sử dụng Price Action, Supply/Demand, Order Block và Smart Money Concepts để xác định vùng giá quan trọng.',
-  },
-  {
-    icon: Shield,
-    title: 'Quản trị rủi ro & vốn',
-    description: 'Xây dựng kế hoạch quản lý vốn, đặt SL/TP hợp lý và kiểm soát cảm xúc khi giao dịch.',
-  },
-  {
-    icon: Target,
-    title: 'Xác định vùng Entry tối ưu',
-    description: 'Phân tích vùng giá tiềm năng để vào lệnh dựa trên confluence của nhiều yếu tố kỹ thuật.',
-  },
-  {
-    icon: Zap,
-    title: 'Tin tức & sự kiện tác động',
-    description: 'Cập nhật các sự kiện macro, quyết định lãi suất, CPI và ảnh hưởng đến thị trường crypto.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Kiến thức nền tảng',
-    description: 'Chia sẻ về blockchain, tokenomics, DeFi và các khái niệm cốt lõi giúp trader hiểu sâu thị trường.',
-  },
-];
+const formatPrice = (p: number) => {
+  if (p >= 1) return `$${p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `$${p.toFixed(6)}`;
+};
 
 const AnalysisSection = () => {
-  const FeaturedIcon = featured.icon;
+  const [data, setData] = useState<MarketData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const cacheRef = useRef<MarketData | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data: res, error } = await supabase.functions.invoke('market-data');
+        if (!error && res && res.tickers) {
+          setData(res as MarketData);
+          cacheRef.current = res as MarketData;
+        } else if (cacheRef.current) {
+          setData(cacheRef.current);
+        }
+      } catch {
+        if (cacheRef.current) setData(cacheRef.current);
+      }
+      setLoading(false);
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const statCards = data ? [
+    { label: 'BTC Dominance', value: `${data.btcDominance}%`, icon: Activity },
+    { label: 'Tổng vốn hóa', value: formatCompact(data.totalMarketCap), icon: DollarSign },
+    { label: 'Volume 24h', value: formatCompact(data.totalVolume24h), icon: BarChart3 },
+  ] : [];
 
   return (
     <section id="analysis" className="section-padding" style={{ backgroundColor: 'hsl(210, 80%, 6%)' }}>
@@ -50,7 +73,7 @@ const AnalysisSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-10 text-center"
+          className="mb-8 text-center"
         >
           <Link
             to="/analysis"
@@ -59,64 +82,131 @@ const AnalysisSection = () => {
             <span className="text-accent">Phân Tích Crypto</span>
             <ArrowRight size={20} className="text-accent group-hover/link:translate-x-1 transition-transform" />
           </Link>
-          <p className="text-sm max-w-xl mx-auto mt-3" style={{ color: 'hsl(210, 20%, 65%)' }}>
-            Tổng hợp phân tích thị trường crypto từ nhiều góc nhìn — kỹ thuật, on-chain và macro.
+          <p className="text-sm max-w-xl mx-auto mt-2" style={{ color: 'hsl(210, 20%, 65%)' }}>
+            Dữ liệu thị trường realtime từ Binance · Cập nhật mỗi 30 giây
           </p>
         </motion.div>
 
-        {/* Featured card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="relative rounded-2xl p-8 md:p-10 mb-6 overflow-hidden border border-accent/20 group cursor-default"
-          style={{ background: 'linear-gradient(135deg, hsl(210, 60%, 10%) 0%, hsl(210, 80%, 6%) 100%)' }}
-        >
-          {/* Glow */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-20 blur-3xl pointer-events-none" style={{ background: 'hsl(var(--accent))' }} />
-
-          <div className="relative flex flex-col md:flex-row md:items-center gap-6">
-            <div className="flex-shrink-0 w-16 h-16 rounded-2xl bg-accent/15 border border-accent/25 flex items-center justify-center">
-              <FeaturedIcon className="w-8 h-8 text-accent" />
-            </div>
-            <div className="flex-1 space-y-3">
-              <span className="inline-block text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full bg-accent/15 text-accent border border-accent/25">
-                {featured.tag}
-              </span>
-              <h3 className="text-xl md:text-2xl font-bold leading-tight" style={{ color: 'hsl(210, 20%, 93%)' }}>
-                {featured.title}
-              </h3>
-              <p className="text-sm md:text-base leading-relaxed max-w-2xl" style={{ color: 'hsl(210, 20%, 65%)' }}>
-                {featured.description}
-              </p>
-            </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <Loader2 className="w-5 h-5 animate-spin text-accent" />
+            <span className="ml-2 text-muted-foreground text-sm">Đang tải dữ liệu...</span>
           </div>
-        </motion.div>
+        ) : !data ? (
+          <p className="text-muted-foreground text-center py-12 text-sm">Không thể tải dữ liệu thị trường</p>
+        ) : (
+          <>
+            {/* Global Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-3 gap-3 mb-6"
+            >
+              {statCards.map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <div
+                    key={i}
+                    className="rounded-xl p-4 border border-border/40 text-center"
+                    style={{ background: 'hsl(210, 50%, 9%)' }}
+                  >
+                    <div className="flex items-center justify-center gap-1.5 mb-1.5">
+                      <Icon className="w-3.5 h-3.5 text-accent/70" />
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.label}</span>
+                    </div>
+                    <span className="text-lg md:text-xl font-bold" style={{ color: 'hsl(210, 20%, 93%)' }}>{s.value}</span>
+                  </div>
+                );
+              })}
+            </motion.div>
 
-        {/* Topic grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {topics.map((topic, i) => {
-            const Icon = topic.icon;
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
-                className="rounded-xl p-6 border border-border/40 hover:border-accent/30 transition-all group/card cursor-default"
-                style={{ background: 'hsl(210, 50%, 9%)' }}
-              >
-                <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-4 group-hover/card:bg-accent/20 transition-colors">
-                  <Icon className="w-5 h-5 text-accent" />
+            {/* Tickers Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="rounded-2xl border border-border/40 overflow-hidden"
+              style={{ background: 'hsl(210, 50%, 9%)' }}
+            >
+              {/* Table header */}
+              <div className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-2.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/30">
+                <span>Coin</span>
+                <span className="text-right min-w-[80px]">Giá</span>
+                <span className="text-right min-w-[60px]">24h %</span>
+                <span className="hidden md:block text-right min-w-[90px]">Volume</span>
+                <span className="text-right min-w-[70px]">H/L</span>
+              </div>
+
+              {/* Rows */}
+              <div className="divide-y divide-border/20">
+                {data.tickers.map((t, i) => {
+                  const isUp = t.priceChange >= 0;
+                  return (
+                    <div
+                      key={t.symbol}
+                      className="grid grid-cols-[1fr_auto_auto_auto] md:grid-cols-[1fr_auto_auto_auto_auto] items-center px-4 py-3 hover:bg-white/[0.03] transition-colors text-sm"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center text-[10px] font-bold text-accent">
+                          {i + 1}
+                        </span>
+                        <span className="font-semibold" style={{ color: 'hsl(210, 20%, 93%)' }}>{t.symbol}</span>
+                        <span className="text-[10px] text-muted-foreground">/USDT</span>
+                      </div>
+                      <span className="text-right font-mono font-medium min-w-[80px]" style={{ color: 'hsl(210, 20%, 93%)' }}>
+                        {formatPrice(t.price)}
+                      </span>
+                      <span className={`text-right font-mono text-xs min-w-[60px] flex items-center justify-end gap-0.5 ${isUp ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                        {isUp ? '+' : ''}{t.priceChange.toFixed(2)}%
+                      </span>
+                      <span className="hidden md:block text-right text-xs font-mono text-muted-foreground min-w-[90px]">
+                        {formatCompact(t.volume)}
+                      </span>
+                      <span className="text-right text-[10px] font-mono min-w-[70px]">
+                        <span className="text-emerald-400/60">{formatPrice(t.high)}</span>
+                        <span className="text-muted-foreground/40 mx-0.5">/</span>
+                        <span className="text-red-400/60">{formatPrice(t.low)}</span>
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer with timestamp */}
+              <div className="px-4 py-2 border-t border-border/20 flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground/50 font-mono">
+                  Nguồn: Binance · CoinGecko
+                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] text-muted-foreground/50">LIVE</span>
                 </div>
-                <h4 className="text-sm font-semibold mb-2" style={{ color: 'hsl(210, 20%, 93%)' }}>{topic.title}</h4>
-                <p className="text-xs leading-relaxed" style={{ color: 'hsl(210, 20%, 60%)' }}>{topic.description}</p>
-              </motion.div>
-            );
-          })}
-        </div>
+              </div>
+            </motion.div>
+
+            {/* Derivatives placeholder */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-4 rounded-xl border border-border/30 p-6 text-center"
+              style={{ background: 'hsl(210, 50%, 9%)' }}
+            >
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Activity className="w-4 h-4 text-accent/60" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Derivatives Data</span>
+              </div>
+              <p className="text-[11px] text-muted-foreground/60">
+                Funding Rate · Open Interest · Liquidation — sắp ra mắt (Coinglass)
+              </p>
+            </motion.div>
+          </>
+        )}
       </div>
     </section>
   );
