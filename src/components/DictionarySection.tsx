@@ -38,7 +38,7 @@ const DictionarySection = () => {
   };
 
   return (
-    <section id="contact" className="section-padding">
+    <section id="contact" className="section-padding" style={{ backgroundColor: 'hsl(210, 80%, 6%)' }}>
       <div className="max-w-xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -46,10 +46,10 @@ const DictionarySection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl md:text-4xl font-semibold mb-3" style={{ color: 'hsl(210, 80%, 8%)' }}>
-            Liên <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>hệ</em>
+          <h2 className="text-3xl md:text-4xl font-semibold mb-3" style={{ color: 'hsl(210, 20%, 95%)' }}>
+            Liên <em className="font-display italic text-accent">hệ</em>
           </h2>
-          <p className="text-sm mb-8" style={{ color: 'hsl(210, 20%, 40%)' }}>
+          <p className="text-sm mb-8" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Để lại email hoặc số điện thoại, chúng tôi sẽ liên hệ lại bạn.
           </p>
         </motion.div>
@@ -60,8 +60,7 @@ const DictionarySection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="rounded-2xl p-8 md:p-10 flex flex-col gap-4"
-          style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 88%)' }}
+          className="warm-gradient-card rounded-2xl p-8 md:p-10 border border-border/40 flex flex-col gap-4"
         >
           <input
             type="text"
@@ -69,14 +68,13 @@ const DictionarySection = () => {
             onChange={(e) => setContactInfo(e.target.value)}
             placeholder="Email hoặc số điện thoại..."
             maxLength={255}
-            className="w-full rounded-xl px-5 py-3.5 placeholder:text-gray-400 focus:outline-none focus:ring-2 transition-all"
-            style={{ background: 'hsl(210, 30%, 97%)', border: '1px solid hsl(210, 20%, 88%)', color: 'hsl(210, 80%, 8%)' }}
+            className="w-full rounded-xl bg-background/60 border border-border/50 px-5 py-3.5 placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+            style={{ color: 'hsl(210, 20%, 93%)' }}
           />
           <button
             type="submit"
             disabled={loading || !contactInfo.trim()}
-            className="w-full rounded-xl font-semibold py-3.5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:brightness-110"
-            style={{ backgroundColor: 'hsl(210, 100%, 28%)', color: 'hsl(0, 0%, 100%)' }}
+            className="w-full rounded-xl bg-accent text-accent-foreground font-semibold py-3.5 hover:bg-accent/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? 'Đang gửi...' : 'Gửi liên hệ'}
           </button>

@@ -24,11 +24,13 @@ const Index = () => {
       <HeroSection />
       <AboutUsSection />
       <IndicatorsSection />
-      <CalendarSection />
-      <NewsSection />
-      <AnalysisSection />
-      <ScenarioSection />
-      <DictionarySection />
+      <div className="bg-warm-yellow">
+        <CalendarSection />
+        <NewsSection />
+        <AnalysisSection />
+        <ScenarioSection />
+        <DictionarySection />
+      </div>
     </div>
   );
 };
