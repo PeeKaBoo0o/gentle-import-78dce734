@@ -68,6 +68,12 @@ const HeroSection = () => {
             Xem kịch bản hôm nay
             <span>→</span>
           </Link>
+          <Link
+            to="/indicators"
+            className="inline-flex items-center gap-2 border border-secondary/40 text-foreground font-medium px-8 py-3.5 rounded-full hover:bg-secondary/10 transition-colors text-sm"
+          >
+            Khám phá công cụ
+          </Link>
         </motion.div>
 
         {/* Stats row */}
