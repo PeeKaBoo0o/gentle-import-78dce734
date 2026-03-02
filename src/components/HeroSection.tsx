@@ -42,16 +42,6 @@ const HeroSection = () => {
           Giao dịch thông minh hơn
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-2xl mx-auto text-center mb-12"
-        >
-          Kịch bản giao dịch, phân tích thị trường và lịch kinh tế — mọi thứ bạn cần để ra quyết định tốt hơn, hoàn toàn miễn phí.
-        </motion.p>
-
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
