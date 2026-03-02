@@ -11,12 +11,15 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Fetch Binance 24h tickers + CoinGecko global data in parallel
-    const [tickerRes, globalRes] = await Promise.all([
+    // Fetch Binance 24h tickers + CoinGecko global + derivatives in parallel
+    const [tickerRes, globalRes, derivativesRes] = await Promise.all([
       fetch('https://api.binance.com/api/v3/ticker/24hr', {
         headers: { 'User-Agent': 'Mozilla/5.0' },
       }),
       fetch('https://api.coingecko.com/api/v3/global', {
+        headers: { 'User-Agent': 'Mozilla/5.0' },
+      }),
+      fetch('https://api.coingecko.com/api/v3/derivatives', {
         headers: { 'User-Agent': 'Mozilla/5.0' },
       }),
     ]);
@@ -48,11 +51,34 @@ Deno.serve(async (req) => {
       totalVolume24h = globalData?.data?.total_volume?.usd ?? 0;
     }
 
+    // Derivatives data from CoinGecko
+    let derivatives: any[] = [];
+    if (derivativesRes.ok) {
+      const derivData = await derivativesRes.json();
+      const targetSymbols = ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'DOGE', 'ADA', 'AVAX', 'DOT', 'LINK'];
+      const seen = new Set<string>();
+      derivatives = (derivData || [])
+        .filter((d: any) => {
+          const base = (d.symbol || '').split('/')[0]?.toUpperCase();
+          if (!targetSymbols.includes(base) || seen.has(base)) return false;
+          seen.add(base);
+          return true;
+        })
+        .map((d: any) => ({
+          symbol: (d.symbol || '').split('/')[0]?.toUpperCase(),
+          fundingRate: d.funding_rate ?? 0,
+          openInterest: d.open_interest ?? 0,
+          volume24h: d.volume_24h ?? 0,
+          spread: d.bid_ask_spread ?? 0,
+        }));
+    }
+
     const result = {
       tickers: filtered,
       btcDominance: Math.round(btcDominance * 100) / 100,
       totalMarketCap,
       totalVolume24h,
+      derivatives,
       updatedAt: new Date().toISOString(),
     };
 
@@ -61,7 +87,7 @@ Deno.serve(async (req) => {
     });
   } catch (e) {
     console.error('Market data error:', e);
-    return new Response(JSON.stringify({ tickers: [], btcDominance: 0, totalMarketCap: 0, totalVolume24h: 0 }), {
+    return new Response(JSON.stringify({ tickers: [], btcDominance: 0, totalMarketCap: 0, totalVolume24h: 0, derivatives: [] }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
