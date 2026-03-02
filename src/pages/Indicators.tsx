@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Zap, Shield, BarChart3, TrendingUp, Eye, Layers, ChevronRight, X } from 'lucide-react';
+import { ExternalLink, Zap, Shield, BarChart3, TrendingUp, Eye, Layers, ChevronRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
 import indicatorImg from '@/assets/indicator-liquidity-hunter.png';
 import indicatorVolatilityImg from '@/assets/indicator-volatility.png';
 import indicatorSltpImg from '@/assets/indicator-sltp.png';
@@ -86,10 +87,11 @@ const Indicators = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse at 50% 0%, hsl(48, 100%, 50%) 0%, transparent 60%)' }} />
-        <div className="relative max-w-6xl mx-auto px-6 md:px-12 pt-8 pb-16">
+        <div className="relative max-w-6xl mx-auto px-6 md:px-12 pt-24 pb-16">
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-accent font-mono text-sm tracking-widest uppercase mb-4">TradingView Indicators</p>
