@@ -90,13 +90,13 @@ const NewsSection = () => {
   const animDuration = news.length * (1.5 + PAUSE_DURATION);
 
   return (
-    <section id="news" className="relative section-padding overflow-hidden">
+    <section id="news" className="relative section-padding overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(210 80% 10%) 0%, hsl(210 60% 16%) 50%, hsl(210 80% 10%) 100%)' }}>
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
-            Tin Tức <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>Crypto</em>
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(0, 0%, 100%)' }}>
+            Tin Tức <em className="font-display italic" style={{ color: 'hsl(48, 100%, 50%)' }}>Crypto</em>
           </h2>
-          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 65%)' }}>
             Tổng hợp tin tức crypto nổi bật từ các nguồn uy tín hàng đầu
           </p>
         </motion.div>
@@ -120,10 +120,10 @@ const NewsSection = () => {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 100% / 0.6) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to right, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
           />
           <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 100% / 0.6) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to left, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
           />
 
           <motion.div
@@ -148,8 +148,9 @@ const NewsSection = () => {
                 className="group block rounded-2xl overflow-hidden transition-all duration-300 flex-shrink-0 hover:-translate-y-1"
                 style={{
                   width: CARD_WIDTH,
-                  background: 'hsl(210, 30%, 96%)',
-                  border: '1px solid hsl(210, 20%, 88%)',
+                  background: 'linear-gradient(145deg, hsl(210 50% 16%) 0%, hsl(210 55% 11%) 100%)',
+                  border: '1px solid hsl(0, 0%, 100%, 0.15)',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
                 }}
               >
                 <div className="relative h-44 overflow-hidden">
@@ -162,24 +163,24 @@ const NewsSection = () => {
                       (e.target as HTMLImageElement).src = '/placeholder.svg';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-                  <div className="absolute top-3 right-3 bg-white/70 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ExternalLink size={12} style={{ color: 'hsl(210, 80%, 8%)' }} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[hsl(210,55%,8%)] via-transparent to-transparent" />
+                  <div className="absolute top-3 right-3 bg-white/10 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ExternalLink size={12} style={{ color: 'hsl(0, 0%, 100%, 0.8)' }} />
                   </div>
                   <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full"
-                    style={{ color: 'hsl(210, 100%, 28%)', background: 'hsl(210, 30%, 95%)', border: '1px solid hsl(210, 20%, 88%)' }}
+                    style={{ color: 'hsl(48, 100%, 70%)', background: 'hsl(0, 0%, 0%, 0.5)', border: '1px solid hsl(48, 100%, 50%, 0.2)' }}
                   >
                     {item.source}
                   </span>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-[13px] font-semibold leading-snug mb-2 line-clamp-2 group-hover:text-[hsl(210,100%,28%)] transition-colors" style={{ color: 'hsl(210, 80%, 8%)' }}>
+                  <h3 className="text-[13px] font-semibold leading-snug mb-2 line-clamp-2 group-hover:text-amber-300 transition-colors" style={{ color: 'hsl(0, 0%, 100%)' }}>
                     {item.title}
                   </h3>
-                  <p className="text-xs leading-relaxed line-clamp-2 mb-3" style={{ color: 'hsl(210, 15%, 40%)' }}>
+                  <p className="text-xs leading-relaxed line-clamp-2 mb-3" style={{ color: 'hsl(0, 0%, 100%, 0.5)' }}>
                     {item.body}
                   </p>
-                  <div className="flex items-center gap-1.5" style={{ color: 'hsl(210, 20%, 50%)' }}>
+                  <div className="flex items-center gap-1.5" style={{ color: 'hsl(48, 100%, 50%, 0.5)' }}>
                     <Clock size={11} />
                     <span className="text-[10px] font-mono">{formatTimeAgo(item.published_on)}</span>
                   </div>

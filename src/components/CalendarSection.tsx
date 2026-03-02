@@ -56,7 +56,7 @@ const CalendarSection = () => {
   const todayStr = new Date().toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'numeric', year: 'numeric' });
 
   return (
-    <section id="calendar" className="section-padding">
+    <section id="calendar" className="section-padding" style={{ background: 'hsl(0, 0%, 100%)' }}>
       <div className="max-w-7xl mx-auto">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
