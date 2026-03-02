@@ -53,7 +53,7 @@ const Navbar = () => {
             navigate('/');
           }
         }}>
-          <img src={tbnClean} alt="TBN" className="h-16 w-auto" style={{ filter: 'brightness(1.5) sepia(0.3) saturate(1.2)' }} />
+          <img src={tbnClean} alt="TBN" className="h-20 w-auto" style={{ filter: 'brightness(1.5) sepia(0.3) saturate(1.2)' }} />
         </div>
 
         <div className="hidden md:flex items-center gap-8">
