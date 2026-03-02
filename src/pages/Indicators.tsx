@@ -90,13 +90,6 @@ const Indicators = () => {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(ellipse at 50% 0%, hsl(48, 100%, 50%) 0%, transparent 60%)' }} />
         <div className="relative max-w-6xl mx-auto px-6 md:px-12 pt-8 pb-16">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-mono text-sm transition-colors mb-16"
-          >
-            <ArrowLeft size={16} />
-            Quay lại
-          </Link>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <p className="text-accent font-mono text-sm tracking-widest uppercase mb-4">TradingView Indicators</p>

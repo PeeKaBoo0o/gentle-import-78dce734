@@ -212,9 +212,6 @@ const Calendar = () => {
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            <Link to="/" className="inline-flex items-center gap-2 text-sm mb-6 hover:underline text-primary">
-              <ArrowLeft size={16} /> Trang chủ
-            </Link>
             <div className="flex items-center gap-3 mb-2">
               <CalendarIcon size={28} className="text-primary" />
               <h1 className="text-2xl md:text-3xl font-bold text-primary">Lịch Kinh Tế</h1>

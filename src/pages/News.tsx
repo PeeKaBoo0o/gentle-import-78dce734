@@ -91,13 +91,6 @@ const News = () => {
     <div className="min-h-screen bg-background text-foreground">
       <div className="section-padding pb-0">
         <div className="max-w-6xl mx-auto">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground font-mono text-sm transition-colors mb-12"
-          >
-            <ArrowLeft size={16} />
-            Quay lại
-          </Link>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="label-tag mb-6">
