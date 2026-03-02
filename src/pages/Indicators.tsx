@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Zap, Shield, BarChart3, TrendingUp, Eye, Layers, ChevronRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -77,6 +77,11 @@ const indicators = [
 
 const Indicators = () => {
   const [selected, setSelected] = useState<string | null>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const active = indicators.find((i) => i.id === selected);
 
   return (
