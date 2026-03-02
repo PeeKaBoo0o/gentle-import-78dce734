@@ -19,7 +19,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <SocialFloating />
+      {/* <SocialFloating /> */}
       <ScrollToTop />
       <HeroSection />
       <AboutUsSection />
