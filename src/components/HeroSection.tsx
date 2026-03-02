@@ -40,8 +40,6 @@ const HeroSection = () => {
           className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-foreground text-center mb-6"
         >
           Giao dịch thông minh hơn
-          <br />
-          <span className="text-accent">mỗi ngày.</span>
         </motion.h1>
 
         {/* Subtitle */}
