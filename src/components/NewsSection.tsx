@@ -90,35 +90,26 @@ const NewsSection = () => {
   const animDuration = news.length * (1.5 + PAUSE_DURATION);
 
   return (
-    <section id="news" className="relative section-padding overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(210 80% 10%) 0%, hsl(210 60% 16%) 50%, hsl(210 80% 10%) 100%)' }}>
-      {/* Accent top border */}
-      <div className="absolute top-0 left-0 right-0 h-1" style={{ background: 'linear-gradient(90deg, transparent, hsl(48 100% 50%), transparent)' }} />
-
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
-        >
-          <span className="inline-block text-xs font-mono uppercase tracking-widest text-secondary mb-4 border border-secondary/30 px-4 py-1.5 rounded-full">📰 Cập nhật mới nhất</span>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            <span className="text-white">Tin Tức</span>{' '}
-            <span style={{ color: 'hsl(48 100% 50%)' }} className="italic">Crypto</span>
+    <section id="news" className="relative section-padding overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
+            Tin Tức <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>Crypto</em>
           </h2>
-          <p className="text-secondary/80 text-sm mt-3 max-w-md mx-auto">Tổng hợp tin tức crypto nổi bật từ các nguồn uy tín hàng đầu</p>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+            Tổng hợp tin tức crypto nổi bật từ các nguồn uy tín hàng đầu
+          </p>
         </motion.div>
       </div>
 
       {loading ? (
-        <div className="max-w-6xl mx-auto flex gap-6 overflow-hidden">
+        <div className="max-w-7xl mx-auto flex gap-6 overflow-hidden">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="animate-pulse warm-gradient-card rounded-2xl p-4 min-w-[320px]">
-              <div className="bg-muted rounded-xl h-44 mb-3" />
-              <div className="bg-muted rounded h-4 w-3/4 mb-2" />
-              <div className="bg-muted rounded h-3 w-full mb-1" />
-              <div className="bg-muted rounded h-3 w-2/3" />
+            <div key={i} className="animate-pulse rounded-2xl p-4 min-w-[320px]" style={{ background: 'hsl(210, 30%, 95%)' }}>
+              <div className="rounded-xl h-44 mb-3" style={{ background: 'hsl(210, 20%, 88%)' }} />
+              <div className="rounded h-4 w-3/4 mb-2" style={{ background: 'hsl(210, 20%, 88%)' }} />
+              <div className="rounded h-3 w-full mb-1" style={{ background: 'hsl(210, 20%, 88%)' }} />
+              <div className="rounded h-3 w-2/3" style={{ background: 'hsl(210, 20%, 88%)' }} />
             </div>
           ))}
         </div>
@@ -129,10 +120,10 @@ const NewsSection = () => {
           onMouseLeave={() => setIsPaused(false)}
         >
           <div className="absolute left-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to right, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 100% / 0.6) 30%, transparent 100%)' }}
           />
           <div className="absolute right-0 top-0 bottom-0 w-32 md:w-48 z-20 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, hsl(210 60% 16%) 0%, hsl(210 60% 16% / 0.6) 30%, transparent 100%)' }}
+            style={{ background: 'linear-gradient(to left, hsl(0, 0%, 100%) 0%, hsl(0, 0%, 100% / 0.6) 30%, transparent 100%)' }}
           />
 
           <motion.div
@@ -154,11 +145,11 @@ const NewsSection = () => {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-2xl overflow-hidden border border-white/15 hover:border-amber-400/50 transition-all duration-300 flex-shrink-0 hover:-translate-y-1"
+                className="group block rounded-2xl overflow-hidden transition-all duration-300 flex-shrink-0 hover:-translate-y-1"
                 style={{
                   width: CARD_WIDTH,
-                  background: 'linear-gradient(145deg, hsl(210 50% 16%) 0%, hsl(210 55% 11%) 100%)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+                  background: 'hsl(210, 30%, 96%)',
+                  border: '1px solid hsl(210, 20%, 88%)',
                 }}
               >
                 <div className="relative h-44 overflow-hidden">
@@ -171,22 +162,24 @@ const NewsSection = () => {
                       (e.target as HTMLImageElement).src = '/placeholder.svg';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[hsl(210,55%,8%)] via-transparent to-transparent" />
-                  <div className="absolute top-3 right-3 bg-white/10 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ExternalLink size={12} className="text-white/80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                  <div className="absolute top-3 right-3 bg-white/70 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ExternalLink size={12} style={{ color: 'hsl(210, 80%, 8%)' }} />
                   </div>
-                  <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wider text-amber-300 bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-amber-400/20">
+                  <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                    style={{ color: 'hsl(210, 100%, 28%)', background: 'hsl(210, 30%, 95%)', border: '1px solid hsl(210, 20%, 88%)' }}
+                  >
                     {item.source}
                   </span>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-[13px] font-semibold text-white leading-snug mb-2 line-clamp-2 group-hover:text-amber-300 transition-colors">
+                  <h3 className="text-[13px] font-semibold leading-snug mb-2 line-clamp-2 group-hover:text-[hsl(210,100%,28%)] transition-colors" style={{ color: 'hsl(210, 80%, 8%)' }}>
                     {item.title}
                   </h3>
-                  <p className="text-xs text-white/50 leading-relaxed line-clamp-2 mb-3">
+                  <p className="text-xs leading-relaxed line-clamp-2 mb-3" style={{ color: 'hsl(210, 15%, 40%)' }}>
                     {item.body}
                   </p>
-                  <div className="flex items-center gap-1.5 text-amber-400/50">
+                  <div className="flex items-center gap-1.5" style={{ color: 'hsl(210, 20%, 50%)' }}>
                     <Clock size={11} />
                     <span className="text-[10px] font-mono">{formatTimeAgo(item.published_on)}</span>
                   </div>
@@ -196,25 +189,18 @@ const NewsSection = () => {
           </motion.div>
         </div>
       ) : (
-        <p className="text-muted-foreground text-sm text-center">Không thể tải tin tức. Vui lòng thử lại sau.</p>
+        <p className="text-sm text-center" style={{ color: 'hsl(210, 20%, 50%)' }}>Không thể tải tin tức. Vui lòng thử lại sau.</p>
       )}
 
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mt-12 text-center"
+      <div className="max-w-7xl mx-auto text-center mt-8">
+        <Link
+          to="/news"
+          className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all hover:brightness-110"
+          style={{ backgroundColor: 'hsl(210, 100%, 28%)', color: 'hsl(0, 0%, 100%)' }}
         >
-          <Link
-            to="/news"
-            className="inline-flex items-center gap-2 text-sm font-medium text-accent bg-accent/10 hover:bg-accent/20 px-6 py-3 rounded-full transition-colors group/all"
-          >
-            <span>Xem tất cả tin trong tuần</span>
-            <ArrowRight size={16} className="group-hover/all:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
+          Xem tất cả tin trong tuần
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

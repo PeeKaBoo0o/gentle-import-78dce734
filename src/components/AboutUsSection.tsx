@@ -21,20 +21,19 @@ const values = [
 
 const AboutUsSection = () => {
   return (
-    <section id="about" className="section-padding bg-background">
-      <div className="max-w-5xl mx-auto">
+    <section id="about" className="section-padding">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
+          className="text-center mb-8"
         >
-          <h2 className="text-2xl md:text-4xl font-bold text-foreground leading-tight mb-4">
-            Hỗ trợ trader Việt <span className="text-accent">ra quyết định tốt hơn.</span>
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
+            Hỗ trợ trader Việt <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>ra quyết định tốt hơn.</em>
           </h2>
-          <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-            TBN cung cấp tín hiệu crypto, phân tích chuyên sâu và công cụ giao dịch miễn phí. Chúng tôi tin rằng mọi nhà đầu tư đều xứng đáng có công cụ tốt — không cần trả phí.
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+            TBN cung cấp tín hiệu crypto, phân tích chuyên sâu và công cụ giao dịch miễn phí.
           </p>
         </motion.div>
 
@@ -46,13 +45,14 @@ const AboutUsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
-              className="warm-gradient-card rounded-2xl border border-border/30 p-6 hover:border-accent/20 transition-colors group"
+              className="rounded-2xl p-6 group"
+              style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 88%)' }}
             >
-              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/15 transition-colors">
-                <v.icon size={20} className="text-accent" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: 'hsl(210, 30%, 90%)' }}>
+                <v.icon size={20} style={{ color: 'hsl(210, 100%, 28%)' }} />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">{v.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
+              <h3 className="text-lg font-semibold mb-2" style={{ color: 'hsl(210, 80%, 8%)' }}>{v.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: 'hsl(210, 15%, 40%)' }}>{v.desc}</p>
             </motion.div>
           ))}
         </div>

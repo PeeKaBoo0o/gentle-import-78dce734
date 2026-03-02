@@ -1,6 +1,6 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import indicatorImg from '@/assets/indicator-liquidity-hunter.png';
 import indicatorVolatilityImg from '@/assets/indicator-volatility.png';
 import indicatorSltpImg from '@/assets/indicator-sltp.png';
@@ -32,119 +32,70 @@ const projects = [
   },
 ];
 
-const CARD_PEEK = 60;
-
 const IndicatorsSection = () => {
   const navigate = useNavigate();
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
-
-  const TARGET_BG = 'hsl(0, 0%, 100%)';
-  const backgroundColor = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.5, 0.58, 0.62, 1],
-    ['hsl(210, 80%, 6%)', 'hsl(210, 80%, 6%)', 'hsl(210, 30%, 40%)', 'hsl(0, 0%, 90%)', TARGET_BG, TARGET_BG]
-  );
 
   return (
-    <motion.section
-      ref={sectionRef}
-      id="indicators"
-      className="section-padding"
-      style={{ backgroundColor }}
-    >
-      <div className="max-w-5xl mx-auto">
-        <div className="relative" style={{ height: '220vh' }}>
-          {projects.map((project, i) => (
-            <div
-              key={i}
-              className="sticky"
-              style={{
-                top: `calc(50vh - 200px + ${i * CARD_PEEK}px)`,
-                zIndex: i + 1,
-              }}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-               className="rounded-2xl overflow-hidden shadow-lg border border-[hsl(210,20%,85%)]/50"
-                style={{
-                  transform: `scale(${1 - i * 0.02})`,
-                  transformOrigin: 'top center',
-                  backgroundColor: 'hsl(210, 20%, 95%)',
-                }}
-              >
-                <div className="grid md:grid-cols-2 gap-0">
-                  <div className="p-8 flex flex-col justify-center">
-                    <span className="inline-flex items-center gap-2 text-[11px] tracking-wider uppercase px-3 py-1 rounded-full w-fit mb-4"
-                      style={{ color: 'hsl(210, 60%, 35%)', backgroundColor: 'hsl(210, 20%, 92%)' }}
-                    >
-                      {project.label}
-                    </span>
-                    <h3 className="text-xl md:text-2xl font-semibold" style={{ color: 'hsl(210, 80%, 10%)' }}>{project.title}</h3>
-                    <p className="text-sm mt-1 mb-3" style={{ color: 'hsl(210, 100%, 30%)' }}>{project.subtitle}</p>
-                    <p className="text-sm leading-relaxed mb-5" style={{ color: 'hsl(210, 15%, 40%)' }}>{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-5">
-                      {project.tech.split(' · ').map((item, idx) => (
-                        <span key={idx} className="text-[11px] px-3 py-1 rounded-full"
-                          style={{ color: 'hsl(210, 20%, 40%)', backgroundColor: 'hsl(210, 20%, 92%)' }}
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                    <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-colors w-fit"
-                      style={{ backgroundColor: 'hsl(210, 100%, 28%)', color: 'hsl(0, 0%, 100%)', border: '1px solid hsl(210, 100%, 35%)' }}
-                    >
-                      Tham gia sử dụng chỉ báo
-                    </button>
-                  </div>
-                  <div className="relative h-64 md:h-auto overflow-hidden">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0" style={{
-                      boxShadow: 'inset 40px 0 30px -10px hsl(210, 20%, 95%)',
-                    }} />
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          ))}
+    <section id="indicators" className="section-padding">
+      <div className="max-w-7xl mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>
+            Chỉ báo <em className="font-display italic" style={{ color: 'hsl(210, 100%, 28%)' }}>kỹ thuật</em>
+          </h2>
+          <p className="text-sm max-w-lg mx-auto mt-3" style={{ color: 'hsl(210, 20%, 40%)' }}>
+            Bộ công cụ chỉ báo kỹ thuật chuyên sâu dành cho trader chuyên nghiệp.
+          </p>
+        </motion.div>
 
-          <div
-            className="sticky"
-            style={{
-              top: `calc(50vh - 200px + ${projects.length * CARD_PEEK}px)`,
-              zIndex: projects.length + 1,
-            }}
-          >
+        <div className="grid md:grid-cols-3 gap-5">
+          {projects.map((project, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.6, delay: projects.length * 0.1 }}
-              className="flex justify-center py-6"
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="rounded-2xl overflow-hidden group"
+              style={{ background: 'hsl(210, 30%, 96%)', border: '1px solid hsl(210, 20%, 88%)' }}
             >
-              <button
-                onClick={() => navigate('/indicators')}
-                className="px-8 py-3.5 rounded-full text-base font-semibold shadow-lg transition-shadow hover:shadow-xl cursor-pointer"
-                style={{
-                  backgroundColor: 'hsl(48, 100%, 50%)',
-                  color: 'hsl(210, 80%, 8%)',
-                  border: '2px solid hsl(48, 100%, 60%)',
-                }}
-              >
-                Sử dụng công cụ →
-              </button>
+              <div className="relative h-48 overflow-hidden">
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+              <div className="p-5 space-y-3">
+                <span className="inline-flex items-center gap-2 text-[10px] tracking-wider uppercase px-2.5 py-0.5 rounded-full"
+                  style={{ color: 'hsl(210, 100%, 28%)', background: 'hsl(210, 30%, 92%)' }}
+                >
+                  {project.label}
+                </span>
+                <h3 className="text-lg font-semibold" style={{ color: 'hsl(210, 80%, 8%)' }}>{project.title}</h3>
+                <p className="text-xs font-medium" style={{ color: 'hsl(210, 100%, 28%)' }}>{project.subtitle}</p>
+                <p className="text-xs leading-relaxed" style={{ color: 'hsl(210, 15%, 40%)' }}>{project.description}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tech.split(' · ').map((item, idx) => (
+                    <span key={idx} className="text-[10px] px-2.5 py-0.5 rounded-full"
+                      style={{ color: 'hsl(210, 20%, 40%)', background: 'hsl(210, 20%, 92%)' }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </motion.div>
-          </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-8">
+          <button
+            onClick={() => navigate('/indicators')}
+            className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all hover:brightness-110"
+            style={{ backgroundColor: 'hsl(210, 100%, 28%)', color: 'hsl(0, 0%, 100%)' }}
+          >
+            Sử dụng công cụ
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 
