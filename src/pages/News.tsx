@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Clock, Newspaper, RefreshCw } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ExternalLink, Clock, Newspaper, RefreshCw } from 'lucide-react';
 import { useEffect, useState, useCallback } from 'react';
+import Navbar from '@/components/Navbar';
+import { cn } from '@/lib/utils';
 
 interface NewsItem {
   id: string;
@@ -88,122 +89,136 @@ const News = () => {
   }, {});
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="section-padding pb-0">
-        <div className="max-w-6xl mx-auto">
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="label-tag mb-6">
-              <Newspaper size={14} />
-              Crypto News
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-wide mb-4">
-              <span className="text-accent font-mono">Tin Tức</span>
-              <span className="text-muted-foreground mx-3">/</span>
-              <span className="text-muted-foreground font-light">Trong Tuần</span>
-            </h1>
-            <p className="text-muted-foreground leading-relaxed text-lg max-w-2xl mb-4">
-              Tổng hợp tin tức crypto nổi bật trong 7 ngày qua — tự động cập nhật mỗi ngày từ các nguồn uy tín.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-muted-foreground">
-              <span className="border border-border px-3 py-1 rounded-full">{news.length} tin tức</span>
-              <span className="border border-border px-3 py-1 rounded-full">7 ngày gần nhất</span>
-              {lastUpdated && (
-                <span className="border border-border px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <RefreshCw size={10} />
-                  Cập nhật: {lastUpdated.toLocaleTimeString('vi-VN')}
-                </span>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="pt-24 pb-16 px-4">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground">📰 Tin Tức Crypto</h1>
+                <p className="text-sm text-muted-foreground mt-1">Tổng hợp tin tức nổi bật trong 7 ngày qua</p>
+              </div>
+              {!loading && (
+                <div className="text-right hidden sm:block">
+                  <p className="text-2xl font-bold text-foreground">{news.length}</p>
+                  <p className="text-xs text-muted-foreground">tin tức</p>
+                </div>
               )}
-              <button
-                onClick={fetchNews}
-                disabled={loading}
-                className="border border-accent/30 text-accent px-3 py-1 rounded-full hover:bg-accent/10 transition-colors flex items-center gap-1.5"
-              >
-                <RefreshCw size={10} className={loading ? 'animate-spin' : ''} />
-                Làm mới
-              </button>
             </div>
-            <div className="h-px bg-border mt-12" />
           </motion.div>
-        </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-24 py-12">
-        {loading && news.length === 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(9)].map((_, i) => (
-              <div key={i} className="animate-pulse rounded-2xl border border-border/40 overflow-hidden">
-                <div className="bg-muted h-48" />
-                <div className="p-5 space-y-3">
-                  <div className="bg-muted rounded h-4 w-3/4" />
-                  <div className="bg-muted rounded h-3 w-full" />
-                  <div className="bg-muted rounded h-3 w-2/3" />
+          {/* Toolbar */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="flex flex-wrap items-center gap-2 mb-6 p-3 rounded-xl border border-border bg-card"
+          >
+            <span className="text-xs text-muted-foreground font-medium">📅 7 ngày gần nhất</span>
+            <span className="w-px h-5 bg-border mx-1 hidden sm:block" />
+            {lastUpdated && (
+              <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                <RefreshCw size={10} />
+                Cập nhật: {lastUpdated.toLocaleTimeString('vi-VN')}
+              </span>
+            )}
+            <button
+              onClick={fetchNews}
+              disabled={loading}
+              className={cn(
+                'ml-auto px-3 py-1.5 rounded-md text-[11px] font-medium transition-all border flex items-center gap-1.5',
+                'border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground'
+              )}
+            >
+              <RefreshCw size={10} className={loading ? 'animate-spin' : ''} />
+              Làm mới
+            </button>
+          </motion.div>
+
+          {/* Content */}
+          {loading && news.length === 0 ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[...Array(9)].map((_, i) => (
+                <div key={i} className="animate-pulse rounded-xl border border-border overflow-hidden">
+                  <div className="bg-muted h-44" />
+                  <div className="p-4 space-y-3">
+                    <div className="bg-muted rounded h-4 w-3/4" />
+                    <div className="bg-muted rounded h-3 w-full" />
+                    <div className="bg-muted rounded h-3 w-2/3" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        ) : news.length > 0 ? (
-          <div className="space-y-12">
-            {Object.entries(groupedNews).map(([date, items]) => (
-              <div key={date}>
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="text-sm font-mono text-accent uppercase tracking-wider whitespace-nowrap">{date}</h2>
-                  <div className="h-px bg-border flex-1" />
-                  <span className="text-xs text-muted-foreground font-mono">{items.length} tin</span>
-                </div>
-                <motion.div variants={container} initial="hidden" animate="show" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {items.map((newsItem) => (
-                    <motion.a
-                      key={newsItem.id}
-                      variants={item}
-                      href={newsItem.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group block rounded-2xl overflow-hidden border border-border/40 bg-card hover:border-accent/30 transition-all duration-300"
-                    >
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={newsItem.imageurl}
-                          alt={newsItem.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent" />
-                        <div className="absolute top-3 right-3">
-                          <ExternalLink size={14} className="text-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-wider text-accent bg-background/60 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                          {newsItem.source}
-                        </span>
-                      </div>
-                      <div className="p-5">
-                        <h3 className="text-sm font-medium text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-accent transition-colors">{newsItem.title}</h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{newsItem.body}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-muted-foreground/60">
-                            <Clock size={11} />
-                            <span className="text-[10px]">{formatTimeAgo(newsItem.published_on)}</span>
+              ))}
+            </div>
+          ) : news.length > 0 ? (
+            <div className="space-y-10">
+              {Object.entries(groupedNews).map(([date, items]) => (
+                <motion.div
+                  key={date}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <h2 className="text-sm font-semibold capitalize text-primary whitespace-nowrap">{date}</h2>
+                    <div className="h-px bg-border flex-1" />
+                    <span className="text-[11px] text-muted-foreground font-mono">{items.length} tin</span>
+                  </div>
+                  <motion.div variants={container} initial="hidden" animate="show" className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {items.map((newsItem) => (
+                      <motion.a
+                        key={newsItem.id}
+                        variants={item}
+                        href={newsItem.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group block rounded-xl overflow-hidden border border-border bg-card hover:border-primary/30 transition-all duration-300 hover:shadow-md"
+                      >
+                        <div className="relative h-44 overflow-hidden">
+                          <img
+                            src={newsItem.imageurl}
+                            alt={newsItem.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                            onError={(e) => { (e.target as HTMLImageElement).src = '/placeholder.svg'; }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-card/90 to-transparent" />
+                          <div className="absolute top-3 right-3">
+                            <ExternalLink size={14} className="text-foreground/60 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
-                          {newsItem.categories && (
-                            <span className="text-[10px] text-muted-foreground/50 font-mono truncate max-w-[120px]">{newsItem.categories.split('|')[0]}</span>
-                          )}
+                          <span className="absolute bottom-3 left-3 text-[10px] uppercase tracking-wider text-primary bg-background/70 backdrop-blur-sm px-2 py-0.5 rounded-full font-medium">
+                            {newsItem.source}
+                          </span>
                         </div>
-                      </div>
-                    </motion.a>
-                  ))}
+                        <div className="p-4">
+                          <h3 className="text-sm font-medium text-foreground leading-snug mb-2 line-clamp-2 group-hover:text-primary transition-colors">{newsItem.title}</h3>
+                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 mb-3">{newsItem.body}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 text-muted-foreground/60">
+                              <Clock size={11} />
+                              <span className="text-[10px]">{formatTimeAgo(newsItem.published_on)}</span>
+                            </div>
+                            {newsItem.categories && (
+                              <span className="text-[10px] text-muted-foreground/50 font-mono truncate max-w-[120px]">{newsItem.categories.split('|')[0]}</span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.a>
+                    ))}
+                  </motion.div>
                 </motion.div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <Newspaper size={48} className="mx-auto text-muted-foreground/30 mb-4" />
-            <p className="text-muted-foreground">Không thể tải tin tức. Vui lòng thử lại sau.</p>
-            <button onClick={fetchNews} className="mt-4 text-accent text-sm hover:underline">Thử lại</button>
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <Newspaper size={48} className="mx-auto text-muted-foreground/30 mb-4" />
+              <p className="text-muted-foreground">Không thể tải tin tức. Vui lòng thử lại sau.</p>
+              <button onClick={fetchNews} className="mt-4 text-primary text-sm hover:underline">Thử lại</button>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
